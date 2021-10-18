@@ -13,6 +13,13 @@
           "type": "resref",
           "value": "lounge"
         }
+      },
+      {
+        "__struct_id": 6,
+        "Area_Name": {
+          "type": "resref",
+          "value": "lounge2"
+        }
       }
     ]
   },
@@ -22,7 +29,7 @@
   },
   "Mod_CustomTlk": {
     "type": "cexostring",
-    "value": ""
+    "value": "conopp"
   },
   "Mod_CutSceneList": {
     "type": "list",

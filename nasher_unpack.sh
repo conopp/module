@@ -12,3 +12,5 @@ rm modules/conopp.mod
 rm hak/conopp.hak
 rm erf/conopp.erf
 rm tlk/conopp.tlk
+
+read -p ""
