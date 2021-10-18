@@ -1,5 +1,6 @@
 # don't git the shortcuts
 modules-development
 modules-production
-nwmain.exe
-nwtoolset.exe
+nwmain.exe.lnk
+nwtoolset.exe.lnk
+userdev.lnk
