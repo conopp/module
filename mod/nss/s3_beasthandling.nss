@@ -1,13 +1,36 @@
-#include "inc_conopp"
+#include "inc_general"
 
-void ExecuteSkillCheck(object oBeast, int nDC)
+void ExecuteSkillCheck(object oBeast)
 {
-    // if beast has no handling variable set, we either forgot to set one for the resref, or the beast is deemed to powerful to serve as an associate
-    if (nDC == 0) {
+    // if you stand in range of beast-handling action/spell, click far away, queue the action, then when you reach movement destination, you'll execute the action from safe distance; this is a fix for that
+    if (GetDistanceToObject(oBeast) >= 5.0) {
+        SendMessageToPC(OBJECT_SELF, "You're too far from the beast to attempt to handle it.");
+        return;
+    }
+
+    // default handling dc will be lower than the check used to gain the creature as an associate; use highest value
+    string sFeed = GetLocalString(oBeast, "bh_feed");
+    int nDC = 0;
+    if (GetMaster(oBeast) != OBJECT_INVALID) {
+        nDC = GetSkinInt(oBeast, "bh_dc");
+    } else {
+        nDC = GetLocalInt(oBeast, "bh_dc");
+    }
+
+    // if beast has no handling variables set, we either forgot to set one for the resref, or the beast is deemed to powerful to serve as an associate
+    if (nDC == 0 || sFeed == "") {
         SendMessageToPC(OBJECT_SELF, "This beast is either too ferocious or intelligent to properly handle.");
         return;
     }
-    
+
+    // take the feed item from the player for attempting to handle the beast
+    object oFeed = GetItemPossessedBy(OBJECT_SELF, sFeed);
+    if (oFeed == OBJECT_INVALID || HasItemEquipped(oFeed) != -1) {
+        SendMessageToPC(OBJECT_SELF, "You don't possess the feed item this beast requires.");
+        return;
+    }
+    DestroyObject(oFeed);
+
     // construct rolls & feedback
     int nSkillValue = GetSkillRank(SKILL_ANIMAL_EMPATHY);
     int nRoll = d20();
@@ -24,7 +47,7 @@ void ExecuteSkillCheck(object oBeast, int nDC)
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_DOMINATE_S), oBeast);
 
         // others trying to handle an already-handled beast will have to beat the roll the current master originally made in order to become the new master
-        SetSkinInt(oBeast, "nBeastHandlingDC", nSkillValue + nRoll);
+        SetSkinInt(oBeast, "bh_dc", nSkillValue + nRoll);
     }
 }
 
@@ -38,46 +61,12 @@ void main()
         return;
     }
 
-    // default handling dc will be lower than the check used to gain the creature as an associate; use highest value
-    int nDC = 0;
-    if (GetMaster(oBeast) != OBJECT_INVALID) {
-        nDC = GetSkinInt(oBeast, "nBeastHandlingDC");
-    } else {
-        nDC = GetLocalInt(oBeast, "nBeastHandlingDC");
-    }
+    // flatfoot the player while trying to handle a beast for duration of CastTime in spells.2da
+    FlatfootCreature(OBJECT_SELF, StringToFloat(Get2DAString("spells", "CastTime", FEAT_BEASTHANDLING)) / 1000, TRUE);
 
     // have beast-handling check run at the end of "casting" wait time; we use cast instead of conj, because cast forces character to remain still wheras conj doesn't
-    DelayCommand(StringToFloat(Get2DAString("spells", "CastTime", 840)) / 1000, ExecuteSkillCheck(oBeast, nDC));
+    DelayCommand(StringToFloat(Get2DAString("spells", "CastTime", FEAT_BEASTHANDLING)) / 1000, ExecuteSkillCheck(oBeast));
 }
-
-// TODO:
-//    - ObjectToJson the creature OnClientExit to spawn it in the exact same state OnClientEnter
-
-/*
-* Noteable TLK StrRefs
-    7940: The target must be aware of you to use this ability.
-        - Unknown; presumably too far from entity to use skill, but we run to it anyway; keep string?
-    Unknown : Animal Empathy : *success* | Animal Empathy: *failure*
-        - Executed by FloatingTextStringOnCreature()
-    10484: <CUSTOM0> : <CUSTOM1> : *<CUSTOM2>* : (<CUSTOM3> <CUSTOM4> <CUSTOM5> = <CUSTOM6> vs. DC: <CUSTOM7>)
-        - Master TLK string; SetTlkOverride() to "" may silence this string and unknown one above, only problem
-        being that it may just enter an empty line rather than no line at all; needs testing
-    63254: Dominated <CUSTOM0>.
-        - Caused by a successful domaination; does a failed empathy check produce a different tlk string?
-    61909: You are no longer dominating <CUSTOM0>.
-        - Caused by resting to lose empathied companion
-    8289: You may not use this skill for another <CUSTOM0> seconds(s).
-        - Caused by trying to use empathy quicker than once every 3 seconds; could be useful, or block it
-
-"Skill Check: Beast-Handling -> Deer (15 + 13 = 28 vs 30) -> Failure"
-
-StrRef:10484 -> "<CUSTOM0> : <CUSTOM1> : *<CUSTOM2>* : (<CUSTOM3> <CUSTOM4> <CUSTOM5>
-    = <CUSTOM6> vs. DC: <CUSTOM7>)"
-    ~ "Take20 : Merom Rescher : Animal Empathy : *success* : "
-StrRef:8289 -> "You may not use this skill for another <CUSTOM0> seconds(s)."
-StrRef:61909 -> "You are no longer dominating <CUSTOM0>."
-StrRef:63254 -> "Dominated <CUSTOM0>."
-*/
 
 /*
 // object oHenchman = GetAssociate(ASSOCIATE_TYPE_HENCHMAN);

@@ -6,7 +6,7 @@ void main()
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_PLAYER_GUIEVENT, "player_gui");
 
     // Subscribed Events
-    NWNX_Events_SubscribeEvent("NWNX_ON_USE_SKILL_BEFORE", "skill_using");
+    NWNX_Events_SubscribeEvent("NWNX_ON_ITEM_EQUIP_AFTER", "equip_after");
 
     // Radial Menu Overrides
     SetTlkOverride(269,  "Beast-Handling");
