@@ -61,16 +61,15 @@ void main()
 
     // default statement is ran if creature is originally polymorphed; skelewand_appr and everything works fine regardless of polymorph
     switch (nApprType) {
-        case APPEARANCE_TYPE_SKELETON_COMMON: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR); break;
-        case APPEARANCE_TYPE_SKELETON_WARRIOR: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR_1); break;
-        case APPEARANCE_TYPE_SKELETON_WARRIOR_1: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR_2); break;
-        case APPEARANCE_TYPE_SKELETON_WARRIOR_2: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_MAGE); break;
-        case APPEARANCE_TYPE_SKELETON_MAGE: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_PRIEST); break;
-        case APPEARANCE_TYPE_SKELETON_PRIEST: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_CHIEFTAIN); break;
+        case APPEARANCE_TYPE_SKELETON_COMMON: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR);
+        case APPEARANCE_TYPE_SKELETON_WARRIOR: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR_1);
+        case APPEARANCE_TYPE_SKELETON_WARRIOR_1: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_WARRIOR_2);
+        case APPEARANCE_TYPE_SKELETON_WARRIOR_2: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_MAGE);
+        case APPEARANCE_TYPE_SKELETON_MAGE: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_PRIEST);
+        case APPEARANCE_TYPE_SKELETON_PRIEST: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_CHIEFTAIN);
         case APPEARANCE_TYPE_SKELETON_CHIEFTAIN:
             SetCreatureAppearanceType(oTarget, GetLocalInt(oSkin, "skelewand_appr"));
             UndoStats(oTarget);
-            break;
         default: SetCreatureAppearanceType(oTarget, APPEARANCE_TYPE_SKELETON_COMMON);
     }
     // 0, APPEARANCE_TYPE_DWARF

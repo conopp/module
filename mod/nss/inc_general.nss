@@ -3,71 +3,8 @@
 // ************************
 
 
-// placeholder
-
-
-// ************************
-// *       Structs        *
-// ************************
-
-
-// for getting the AC value of gear; takes highest value for each category in case item has multiple on accident
-// to get the data required to set these values, see GetItemProperty* functions
-// if GetItemPropertyType != ITEM_PROPERTY_AC_*, this struct should not be returned
-struct strArmorClassModifiers
-{
-    int nArmorClassType; // IP_CONST_ACMODIFIERTYPE_*
-
-    // if GetItemPropertyType() == ITEM_PROPERTY_AC_BONUS
-    // defined in iprp_melee.2da; set by ItemPropertyACBonus
-    // values: 1-20
-    int nGeneralBonus;
-
-    // if GetItemPropertyType() == ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP
-    // defined in iprp_aligngrp.2da
-    // constants:
-    //   1 -> IP_CONST_ALIGNMENTGROUP_NEUTRAL
-    //   2 -> IP_CONST_ALIGNMENTGROUP_LAWFUL
-    //   3 -> IP_CONST_ALIGNMENTGROUP_CHAOTIC
-    //   4 -> IP_CONST_ALIGNMENTGROUP_GOOD
-    //   5 -> IP_CONST_ALIGNMENTGROUP_EVIL
-    int nAlignmentGroup;
-    // defined in iprp_melee.2da; set by ItemPropertyACBonusVsAlign
-    // values: 1-20
-    int nAlignmentGroupBonu;
-
-    // if GetItemPropertyType() == ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE
-    // defined in iprp_combatdam.2da
-    // constants:
-    //   1 -> IP_CONST_DAMAGETYPE_BLUDGEONING
-    //   2 -> IP_CONST_DAMAGETYPE_PIERCING
-    //   3 -> IP_CONST_DAMAGETYPE_SLASHING
-    int nDamageType;
-    // defined in iprp_melee.2da; set by ItemPropertyACBonusVsDmgType
-    // values: 1-20
-    int nDamageTypeBonus;
-
-    // if GetItemPropertyType() == ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE
-    // defined in racialtypes.2da
-    // values: see 2da
-    int nRacialGroup;
-    // defined in iprp_melee.2da; set by ItemPropertyACBonusVsRace
-    // values: 1-20
-    int nRacialGroupBonus;
-
-    // if GetItemPropertyType() == ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT
-    // defined in iprp_alignment.2da
-    // constants:
-    //   1 -> IP_CONST_ALIGNMENTGROUP_NEUTRAL
-    //   2 -> IP_CONST_ALIGNMENTGROUP_LAWFUL
-    //   3 -> IP_CONST_ALIGNMENTGROUP_CHAOTIC
-    //   4 -> IP_CONST_ALIGNMENTGROUP_GOOD
-    //   5 -> IP_CONST_ALIGNMENTGROUP_EVIL
-    int nSpecificAlignment;
-    // defined in iprp_melee.2da; set by ItemPropertyACBonusVsSAlign
-    // values: 1-20
-    int nSpecificAlignmentBonus;
-};
+#include "nwnx_object"
+#include "nwnx_creature"
 
 
 // ************************
@@ -77,11 +14,9 @@ struct strArmorClassModifiers
 
 int i = 0; // iterative for-loop indexer
 
-const int FEAT_BEASTHANDLING = 840; // spells.2da
+const int FEAT_IMMUNITY_FLATFOOT = 1435; // feat.2da
 
-const int ITEMPROPERTY_TYPE_ACBONUS = 1; // itemprops.2da
-
-const int ITEMPROPERTY_COSTTABLE_MELEE = 2; // iprp_costtable.2da
+const int SPELL_BEASTHANDLING = 840; // spells.2da
 
 
 // ************************
@@ -89,33 +24,25 @@ const int ITEMPROPERTY_COSTTABLE_MELEE = 2; // iprp_costtable.2da
 // ************************
 
 
+// Gives the creature a skin if they don't already have one
+void GiveCreatureSkin(object oCreature);
+
 // Sets a variable on a creature's skin item
 void SetSkinInt(object oCreature, string sVariable, int nValue);
 
 // Sets a variable on a creature's skin item
-void SetSkinFloat(object oCreature, string sVariable,float fValue);
+void SetSkinFloat(object oCreature, string sVariable, float fValue);
 
 // Sets a variable on a creature's skin item
-void SetSkinString(object oCreature, string sVariable,string sValue);
+void SetSkinString(object oCreature, string sVariable, string sValue);
+
+// Sets a variable on a creature's skin item
+void SetSkinLocation(object oCreature, string sVariable, location lValue);
 
 // Sets a variable on a creature's skin item
 // Creates skin item on creature if it doesn't yet exist
 // jValue type is already assumed to have been declared or set
 void SetSkinJson(object oCreature, string sVariable, json jValue);
-
-// TODO - NWN_OnEquip -> If creature is currently has nFlatfooted >= 1 & baseitem = boots, remove the dodge ac loss effect from them and re-apply it with new boots dodge ac (will still work fine even if creature didn't have boots already equipped when they became flatfooted)
-// Flatfoots a creature for a duration
-// Sets Dexterity to 3
-// Removes all dodge AC from gear from creature
-// Option to tag the effect for referencing later (this should be the name of the thing causing flatfootedness)
-// Option to disable movement
-void FlatfootCreature(object oCreature, float fSeconds, int bStopMovement);
-
-// Cycles through a creature's effects and removes the first effect on a creature with tag sTag
-void RemoveTaggedEffect(object oCreature, string sTag);
-
-// Identical to RemoveTaggedEffect, except that it doesn't stop after the first match
-void RemoveAllTaggedEffects(object oCreature, string sTag);
 
 // *************************
 
@@ -129,14 +56,30 @@ float GetSkinFloat(object oCreature, string sVariable);
 string GetSkinString(object oCreature, string sVariable);
 
 // Gets a variable from a creature's skin item
-json GetSkinJson(object oCreature, string sVariable);
+location GetSkinLocation(object oCreature, string sVariable);
 
-// Returns total Dodge AC from the currently equipped boots
-json GetWornGearAC(int nInventorySlot, object oCreature=OBJECT_SELF);
+// Gets a variable from a creature's skin item
+json GetSkinJson(object oCreature, string sVariable);
 
 // Returns the duration remaining of an effect with sTag on a creature
 // If multiple effects of the same tag exists, it returns the longest time
 int GetTaggedEffectDurationRemaining(object oCreature, string sTag);
+
+// Returns an object's location as json object; works identically to GetLocation() except for return type
+// example of json structure that'd be built:
+// {
+//     area: "uuid-1234567890",
+//     position: {
+//         "x": 27.3,
+//         "y": 16.8,
+//         "z": 1.0
+//     },
+//     facing: 217.0
+// }
+json GetLocationAsJson(object oObject);
+
+// Counter to GetLocationAsJson(); returns a proper nwscript location type from a GetLocationAsJson()
+location GetLocationFromJson(json joLocation);
 
 // *************************
 
@@ -150,7 +93,16 @@ void DeleteSkinFloat(object oCreature, string sVariable);
 void DeleteSkinString(object oCreature, string sVariable);
 
 // Deletes a variable from a creature's skin item
+void DeleteSkinLocation(object oCreature, string sVariable);
+
+// Deletes a variable from a creature's skin item
 void DeleteSkinJson(object oCreature, string sVariable);
+
+// Cycles through a creature's effects and removes the first effect on a creature with tag sTag
+void RemoveTaggedEffect(object oCreature, string sTag);
+
+// Identical to RemoveTaggedEffect, except that it doesn't stop after the first match
+void RemoveAllTaggedEffects(object oCreature, string sTag);
 
 // *************************
 
@@ -163,83 +115,160 @@ string GetColorCode(int nRed=255, int nGreen=255, int nBlue=255);
 // Returns an INVENTORY_SLOT_* constant if a creature has the specified item equipped in any possible slot, or -1 on failure
 int HasItemEquipped(object oItem, object oCreature=OBJECT_SELF);
 
+// Flatfoots a creature for a duration (non-stacking -10dex & boots' dodge ac lost)
+// Even with Monster Uncanny Dodge, creatures can still be flatfooted with EffectStunned, EffectParalysis, EffectEntangle, EffectSleep, EffectPetrified (and maybe others); the fix for this is to similate all these effects without actually using them (preventing a player from moving with the boulder option and setting them uncommandable)
+void FlatfootCreature(object oCreature, float fSeconds);
+
+// Forces the creature to lose any AC (including any vs. specified types) from a worn gear item for a duration
+// nArmorClassType is the AC type to lose AC for
+// nInventorySlot is the inventory slot to check AC of; this doesn't necessarily need to match nArmorClassType, but should in most cases
+// sTag is the tag to apply to the AC penalty effect to reference later
+void ApplyArmorClassLossFromGear(object oCreature, int nArmorClassType, int nInventorySlot, float fSeconds, int nEffectIcon=EFFECT_TYPE_INVALIDEFFECT, string sTag="");
+
+
 // *************************
 // *       Functions       *
 // *************************
 
 
 void GiveCreatureSkin(object oCreature) {
-    object oSkin = CreateItemOnObject("iit_cr_item_001", oCreature);
-    SetDroppableFlag(oSkin, FALSE);
-    AssignCommand(oCreature, ActionEquipItem(oSkin, INVENTORY_SLOT_CARMOUR));
+    // iit_cr_item_001 may be the skin item required for creatures, or all creatures may require x3_it_pchide; either way, x3_it_pchide is the only hide player characters are able to wear, the other type doesn't seem to spawn even when commanded to
+    object oSkin = CreateItemOnObject("x3_it_pchide", oCreature);
+    NWNX_Creature_RunEquip(oCreature, oSkin, INVENTORY_SLOT_CARMOUR);
+    SetItemCursedFlag(oSkin, TRUE);
 }
 
 void SetSkinInt(object oCreature, string sVariable, int nValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-        DelayCommand(0.1, SetSkinInt(oCreature, sVariable, nValue));
-    }
-
-    SetLocalInt(oSkin, sVariable, nValue);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    DelayCommand(0.1, SetSkinInt(oCreature, sVariable, nValue));
 }
 
 void SetSkinFloat(object oCreature, string sVariable, float fValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
     DelayCommand(0.1, SetLocalFloat(oSkin, sVariable, fValue));
 }
 
 void SetSkinString(object oCreature, string sVariable, string sValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
     DelayCommand(0.1, SetLocalString(oSkin, sVariable, sValue));
+}
+
+void SetSkinLocation(object oCreature, string sVariable, location lValue) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    DelayCommand(0.1, SetLocalLocation(oSkin, sVariable, lValue));
 }
 
 void SetSkinJson(object oCreature, string sVariable, json jValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
     DelayCommand(0.1, SetLocalJson(oSkin, sVariable, jValue));
 }
 
-// TODO - INSTEAD OF EffectCustsceneImmobilize, REPLACE IT WITH THE ROCK-METHOD (SEE COMMENTED-OUT GUI_LockPlayerInput FUNCTION AT BOTTOM)
-// TODO - IN equip_after.nss & HERE, APPLY DODGE PENALTIES TO ANY SUBTYPES TOO (VS. RACE/ALIGNMENT)
-void FlatfootCreature(object oCreature, float fSeconds, int bStopMovement) {
-    // dexterity loss can stack for however many instances of flatfooted a creature has, but dodge ac loss should only be applied once, and always be lost for exactly as long as a creature is flatfooted, refreshing the loss duration if necessary; this ensures that
-    if (fSeconds > IntToFloat(GetTaggedEffectDurationRemaining(oCreature, "bootsdodgeacloss"))) {
-        RemoveAllTaggedEffects(oCreature, "bootsdodgeacloss");
+// *************************
 
-        // loop through the boot's item properties and apply ac penalties to player for all the ac types listed on the the boots
-        json jArmorClass = GetWornGearAC(INVENTORY_SLOT_BOOTS, oCreature);
-        if (jArmorClass != JsonNull()) {
-            for(i = ITEM_PROPERTY_AC_BONUS; i++; i <= ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT) {
-                int nArmorClass = JsonGetInt(JsonObjectGet(jArmorClass, IntToString(i)));
-                if (nArmorClass != 0) ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectACDecrease(nArmorClass), "bootsdodgeacloss"), OBJECT_SELF, fSeconds);
-            }
+int GetSkinInt(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    return GetLocalInt(oSkin, sVariable);
+}
+
+float GetSkinFloat(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    return GetLocalFloat(oSkin, sVariable);
+}
+
+string GetSkinString(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    return GetLocalString(oSkin, sVariable);
+}
+
+location GetSkinLocation(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    return GetLocalLocation(oSkin, sVariable);
+}
+
+json GetSkinJson(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
+    return GetLocalJson(oSkin, sVariable);
+}
+
+int GetTaggedEffectDurationRemaining(object oCreature, string sTag) {
+    int nSeconds = 0;
+    effect eEffect = GetFirstEffect(oCreature);
+    while (GetIsEffectValid(eEffect)) {
+        if (GetEffectTag(eEffect) == sTag) {
+            int nCompare = GetEffectDurationRemaining(eEffect);
+            if (nSeconds < nCompare) nSeconds = nCompare;
         }
+        eEffect = GetNextEffect(oCreature);
     }
+    return nSeconds;
+}
 
-    effect eDexterityDecrease = EffectAbilityDecrease(ABILITY_DEXTERITY, 99);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDexterityDecrease, oCreature, fSeconds);
+json GetLocationAsJson(object oObject) {
+    json joLocation = JsonObject();
+    // set area
+    joLocation = JsonObjectSet(joLocation, "area", JsonString(GetTag(GetArea(oObject))));
+    // set position
+    json joPosition = JsonObject();
+    vector vPosition = GetPosition(oObject);
+    joPosition = JsonObjectSet(joPosition, "x", JsonFloat(vPosition.x));
+    joPosition = JsonObjectSet(joPosition, "y", JsonFloat(vPosition.y));
+    joPosition = JsonObjectSet(joPosition, "z", JsonFloat(vPosition.z));
+    joLocation = JsonObjectSet(joLocation, "position", joPosition);
+    // set facing
+    joLocation = JsonObjectSet(joLocation, "facing", JsonFloat(GetFacing(oObject)));
 
-    /* if (bStopMovement) stick-em-inside-a-rock */
+    return joLocation;
+}
 
-    // keep track of the amount of flatfooted effects on the creature, so we know if we should watch the creature's boots item for equip changes to update the dodge ac loss
-    SetLocalInt(oCreature, "nFlatfooted", GetLocalInt(oCreature, "nFlatfooted") + 1);
-    DelayCommand(fSeconds, SetLocalInt(oCreature, "nFlatfooted", GetLocalInt(oCreature, "nFlatfooted") - 1));
+location GetLocationFromJson(json joLocation) {
+    // get area
+    object oArea = GetObjectByTag(JsonGetString(JsonObjectGet(joLocation, "area")));
+    // get position
+    json joPosition = JsonObjectGet(joLocation, "position");
+    float x = JsonGetFloat(JsonObjectGet(joPosition, "x"));
+    float y = JsonGetFloat(JsonObjectGet(joPosition, "y"));
+    float z = JsonGetFloat(JsonObjectGet(joPosition, "z"));
+    vector vPosition = Vector(x, y, z);
+    // get facing
+    float fFacing = JsonGetFloat(JsonObjectGet(joLocation, "facing"));
 
-    // apply & remove an additional dex loss & ac loss, so player doesn't have the respective negative icons next to their portrait; temporary in case of server crash, we don't want the effects permanently on them
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(EffectAbilityDecrease(ABILITY_DEXTERITY, 1), EffectACDecrease(1)), "eTemp"), oCreature, 0.1);
-    RemoveAllTaggedEffects(oCreature, "eTemp");
+    return Location(oArea, vPosition, fFacing);
+}
+
+// *************************
+void DeleteSkinInt(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (GetIsObjectValid(oSkin)) DeleteLocalInt(oSkin, sVariable);
+}
+
+void DeleteSkinFloat(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (GetIsObjectValid(oSkin)) DeleteLocalFloat(oSkin, sVariable);
+}
+
+void DeleteSkinString(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (GetIsObjectValid(oSkin)) DeleteLocalString(oSkin, sVariable);
+}
+
+void DeleteSkinLocation(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (GetIsObjectValid(oSkin)) DeleteLocalLocation(oSkin, sVariable);
+}
+
+void DeleteSkinJson(object oCreature, string sVariable) {
+    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
+    if (GetIsObjectValid(oSkin)) DeleteLocalJson(oSkin, sVariable);
 }
 
 void RemoveTaggedEffect(object oCreature, string sTag) {
@@ -260,107 +289,6 @@ void RemoveAllTaggedEffects(object oCreature, string sTag) {
             RemoveEffect(oCreature, eLoop);
         }
         eLoop = GetNextEffect(oCreature);
-    }
-}
-
-// *************************
-
-int GetSkinInt(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
-    return GetLocalInt(oSkin, sVariable);
-}
-
-float GetSkinFloat(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
-    return GetLocalFloat(oSkin, sVariable);
-}
-
-string GetSkinString(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
-    return GetLocalString(oSkin, sVariable);
-}
-
-json GetSkinJson(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) {
-        GiveCreatureSkin(oCreature);
-    }
-
-    return GetLocalJson(oSkin, sVariable);
-}
-
-json GetWornGearAC(int nInventorySlot, object oCreature=OBJECT_SELF) {
-    json jArmorClass = JsonObject();
-
-    object oItem = GetItemInSlot(nInventorySlot, oCreature);
-    if (!GetIsObjectValid(oItem)) return JsonNull();
-
-    itemproperty ipItemProp = GetFirstItemProperty(oItem);
-    while (GetIsItemPropertyValid(ipItemProp)) {
-        // skip itemproperty if it's not AC
-        int nType = GetItemPropertyType(ipItemProp);
-        if (nType != ITEM_PROPERTY_AC_BONUS || nType != ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP || nType != ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE || nType != ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP || nType != ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT) continue;
-
-        // in case multiple itemproperty ac types exist, save the highest
-        int nCompare = JsonGetInt(JsonObjectGet(jArmorClass, IntToString(nType)));
-        int nBonus = GetItemPropertyCostTableValue(ipItemProp);
-        if (nCompare < nBonus) JsonObjectSet(jArmorClass, IntToString(nType), JsonInt(nBonus));
-    }
-
-    return jArmorClass;
-}
-
-int GetTaggedEffectDurationRemaining(object oCreature, string sTag) {
-    int nSeconds = 0;
-    effect eEffect = GetFirstEffect(oCreature);
-    while (GetIsEffectValid(eEffect)) {
-        if (GetEffectTag(eEffect) == sTag) {
-            int nCompare = GetEffectDurationRemaining(eEffect);
-            if (nSeconds < nCompare) nSeconds = nCompare;
-        }
-        eEffect = GetNextEffect(oCreature);
-    }
-    return nSeconds;
-}
-
-// *************************
-void DeleteSkinInt(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (GetIsObjectValid(oSkin)) {
-        DeleteLocalInt(oSkin, sVariable);
-    }
-}
-
-void DeleteSkinFloat(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (GetIsObjectValid(oSkin)) {
-        DeleteLocalFloat(oSkin, sVariable);
-    }
-}
-
-void DeleteSkinString(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (GetIsObjectValid(oSkin)) {
-        DeleteLocalString(oSkin, sVariable);
-    }
-}
-
-void DeleteSkinJson(object oCreature, string sVariable) {
-    object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (GetIsObjectValid(oSkin)) {
-        DeleteLocalJson(oSkin, sVariable);
     }
 }
 
@@ -395,17 +323,72 @@ int HasItemEquipped(object oItem, object oCreature=OBJECT_SELF) {
     else return -1;
 }
 
-// add https://github.com/Daztek/EventSystem/blob/master/Components/Services/es_srv_gui.nss#L168
-// void GUI_LockPlayerInput(object oPlayer)
-// {
-//     GUI_UnlockPlayerInput(oPlayer);
+void FlatfootCreature(object oCreature, float fSeconds) {
+    // if new flatfooted effect will expire before the existing one, don't add it at all; we only want 1 stack to ever exist at a time on the creature; "flatfooted_dex" is a more stable effect than "flatfooted_ac" which gets replaced more often (when boots are (un)equipped)
+    if (fSeconds < IntToFloat(GetTaggedEffectDurationRemaining(oCreature, "flatfooted_dex")) || GetHasFeat(FEAT_IMMUNITY_FLATFOOT, oCreature)) return;
 
-//     location locPlayer = GetLocation(oPlayer);
-//     object oLock = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_boulder", locPlayer, FALSE, GUI_SCRIPT_NAME + "_InputLock");
+    // removing previous effects can sometimes take too long and run after we assigned the new effects; DelayCommand ensures our new effects apply afterwards
+    RemoveAllTaggedEffects(oCreature, "flatfooted_ac");
+    RemoveTaggedEffect(oCreature, "flatfooted_dex");
+    DelayCommand(0.0, ApplyArmorClassLossFromGear(oCreature, AC_DODGE_BONUS, INVENTORY_SLOT_BOOTS, fSeconds, EFFECT_ICON_FATIGUE, "flatfooted_ac"));
+    DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(EffectAbilityDecrease(ABILITY_DEXTERITY, 10)), EffectIcon(EFFECT_ICON_FATIGUE)), "flatfooted_dex"), oCreature, fSeconds));
 
-//     SetPlotFlag(oLock, TRUE);
-//     NWNX_Object_SetPosition(oPlayer, GetPositionFromLocation(locPlayer));
-//     ApplyEffectToObject(DURATION_TYPE_PERMANENT, ExtraordinaryEffect(EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY)), oLock);
+    DeleteLocalInt(oCreature, "bFlatfooted");
+    SetLocalInt(oCreature, "bFlatfooted", TRUE);
+    DelayCommand(fSeconds, DeleteLocalInt(oCreature, "bFlatfooted"));
+}
 
-//     SetLocalObject(oPlayer, GUI_SCRIPT_NAME + "_InputLock", oLock);
-// }
+void ApplyArmorClassLossFromGear(object oCreature, int nArmorClassType, int nInventorySlot, float fSeconds, int nEffectIcon, string sTag) {
+    object oItem = GetItemInSlot(INVENTORY_SLOT_BOOTS, oCreature);
+    if (!GetIsObjectValid(oItem)) return;
+
+    itemproperty ipProp = GetFirstItemProperty(oItem);
+    while (GetIsItemPropertyValid(ipProp)) {
+        int nType = GetItemPropertyType(ipProp);
+        int nSubtype = GetItemPropertySubType(ipProp);
+        int nValue = GetItemPropertyCostTableValue(ipProp);
+
+        SendMessageToPC(oCreature, "nType:" + IntToString(nType) + " | " + "nSubtype:" + IntToString(nSubtype) + " | " + "nValue:" + IntToString(nValue));
+
+        if (nType == ITEM_PROPERTY_AC_BONUS) {
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(EffectACDecrease(nValue, nValue)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+        } else if (nType == ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP) {
+            if (nSubtype == IP_CONST_ALIGNMENTGROUP_LAWFUL || nSubtype == IP_CONST_ALIGNMENTGROUP_CHAOTIC) {
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACDecrease(nValue), nSubtype, ALIGNMENT_ALL)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+            } else if (nSubtype == IP_CONST_ALIGNMENTGROUP_GOOD || nSubtype == IP_CONST_ALIGNMENTGROUP_EVIL) {
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACDecrease(nValue), ALIGNMENT_ALL, nSubtype)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+            } else if (nSubtype == IP_CONST_ALIGNMENTGROUP_NEUTRAL) {
+                // we apply decrease to law-chaos & good-evil axis, then increase for true-neutral where they overlap, so the decrease is consistent and looks like a plus sign
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACDecrease(nValue), ALIGNMENT_ALL, nSubtype)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACDecrease(nValue), nSubtype, ALIGNMENT_ALL)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACIncrease(nValue), nSubtype, nSubtype)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+            }
+        } else if (nType == ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE) {
+            int nDamageType = (nValue == IP_CONST_DAMAGETYPE_BLUDGEONING) ? (DAMAGE_TYPE_BASE_WEAPON + DAMAGE_TYPE_BLUDGEONING) : (nValue == IP_CONST_DAMAGETYPE_PIERCING) ? (DAMAGE_TYPE_BASE_WEAPON + DAMAGE_TYPE_PIERCING) : (DAMAGE_TYPE_BASE_WEAPON + DAMAGE_TYPE_SLASHING);
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(EffectACDecrease(nValue, AC_DODGE_BONUS, nDamageType)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+        } else if (nType == ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP) {
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusRacialTypeEffect(EffectACDecrease(nValue), nSubtype)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+        } else if (nType == ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT) {
+            int nLawChaos = 0;
+            int nGoodEvil = 0;
+            if (nSubtype == IP_CONST_ALIGNMENT_LG) {nLawChaos = 2; nGoodEvil = 4;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_LN) {nLawChaos = 2; nGoodEvil = 1;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_LE) {nLawChaos = 2; nGoodEvil = 5;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_NG) {nLawChaos = 1; nGoodEvil = 4;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_TN) {nLawChaos = 1; nGoodEvil = 1;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_NE) {nLawChaos = 1; nGoodEvil = 5;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_CG) {nLawChaos = 3; nGoodEvil = 4;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_CN) {nLawChaos = 3; nGoodEvil = 1;}
+            else if (nSubtype == IP_CONST_ALIGNMENT_CE) {nLawChaos = 3; nGoodEvil = 5;}
+            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, TagEffect(EffectLinkEffects(HideEffectIcon(VersusAlignmentEffect(EffectACDecrease(nValue), nLawChaos, nGoodEvil)), EffectIcon(nEffectIcon)), sTag), oCreature, fSeconds);
+        }
+
+        ipProp = GetNextItemProperty(oItem);
+    }
+}
+
+// lock player into place by plopping them inside an object that exists at that same location
+// object oPlaceable = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_invisobj", GetLocation(oCreature), FALSE); // may need to use different (bigger?) object for locking to work
+// ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY), oPlaceable);
+// NWNX_Object_SetPosition(oCreature, GetPositionFromLocation(GetLocation(oCreature)));
+// DelayCommand(fSeconds, DestroyObject(oPlaceable));

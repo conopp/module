@@ -13,4 +13,4 @@ rm hak/conopp.hak
 rm erf/conopp.erf
 rm tlk/conopp.tlk
 
-read -p ""
+read -p "DONE"

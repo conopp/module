@@ -1,6 +1,8 @@
 #include "nwnx_admin"
 #include "nwnx_feedback"
 
+sqlquery sqlQuery;
+
 void main()
 {
     // Set Debug Options
@@ -20,5 +22,18 @@ void main()
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_MODULE_LOAD, "module_load");
 
     // Setup Databases
+    sqlQuery = SqlPrepareQueryCampaign("conopp", "" +
+        "CREATE TABLE IF NOT EXISTS characters " +
+        "(uuid TEXT UNIQUE NOT NULL, cdkey TEXT NOT NULL, name TEXT NOT NULL, location BLOB, health INTEGER, creation INTEGER NOT NULL) "
+    ); SqlStep(sqlQuery);
 
+    // empty leftover areas from table if server closed while areas were still in scheduled for cleanup
+    // uuid is okay here because the table doesn't persist across restarts, just like uuid
+    sqlQuery = SqlPrepareQueryCampaign("conopp", "" +
+        "DROP TABLE IF EXISTS _areacleanup "
+    ); SqlStep(sqlQuery);
+    sqlQuery = SqlPrepareQueryCampaign("conopp", "" +
+        "CREATE TABLE _areacleanup " +
+        "(uuid TEXT UNIQUE NOT NULL, creatures BLOB NOT NULL, scheduled INTEGER NOT NULL) "
+    ); SqlStep(sqlQuery);
 }

@@ -2,12 +2,6 @@
 
 void ExecuteSkillCheck(object oBeast)
 {
-    // if you stand in range of beast-handling action/spell, click far away, queue the action, then when you reach movement destination, you'll execute the action from safe distance; this is a fix for that
-    if (GetDistanceToObject(oBeast) >= 5.0) {
-        SendMessageToPC(OBJECT_SELF, "You're too far from the beast to attempt to handle it.");
-        return;
-    }
-
     // default handling dc will be lower than the check used to gain the creature as an associate; use highest value
     string sFeed = GetLocalString(oBeast, "bh_feed");
     int nDC = 0;
@@ -62,10 +56,10 @@ void main()
     }
 
     // flatfoot the player while trying to handle a beast for duration of CastTime in spells.2da
-    FlatfootCreature(OBJECT_SELF, StringToFloat(Get2DAString("spells", "CastTime", FEAT_BEASTHANDLING)) / 1000, TRUE);
+    FlatfootCreature(OBJECT_SELF, StringToFloat(Get2DAString("spells", "CastTime", SPELL_BEASTHANDLING)) / 1000);
 
     // have beast-handling check run at the end of "casting" wait time; we use cast instead of conj, because cast forces character to remain still wheras conj doesn't
-    DelayCommand(StringToFloat(Get2DAString("spells", "CastTime", FEAT_BEASTHANDLING)) / 1000, ExecuteSkillCheck(oBeast));
+    DelayCommand(StringToFloat(Get2DAString("spells", "CastTime", SPELL_BEASTHANDLING)) / 1000, ExecuteSkillCheck(oBeast));
 }
 
 /*

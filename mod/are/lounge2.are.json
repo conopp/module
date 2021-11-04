@@ -148,7 +148,7 @@
   },
   "Tag": {
     "type": "cexostring",
-    "value": "Lounge"
+    "value": "lounge2"
   },
   "Tile_List": {
     "type": "list",

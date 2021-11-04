@@ -15,7 +15,8 @@ cp hak/conopp.hak erf/conopp.erf
 
 cd ../../..
 cp development/game-8193.31/user/modules/conopp.mod production/mod/conopp.mod
+rm production/dev/*
 cp -r development/game-8193.31/user/development/. production/dev/
 cp development/game-8193.31/user/tlk/conopp.tlk production/tlk/conopp.tlk
 
-read -p ""
+read -p "DONE"
