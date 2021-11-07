@@ -1,4 +1,6 @@
+#include "inc_general"
 #include "nwnx_area"
+#include "nwnx_object"
 
 const int CLEANUP_TIME = 300; // seconds
 
@@ -10,22 +12,42 @@ void CleanupArea();
 void main()
 {
     string sObject = ObjectToString(GetExitingObject());
-    // workaround for GetIsPC returning false if area exit event was fired due to player leaving server
-    if (GetStringLength(sObject) != 8 || GetStringLeft(sObject, 4) != "7fff") return;
+    if (GetStringLength(sObject) != 8 || GetStringLeft(sObject, 4) != "7fff") return; // now-invalid player object requires GetIsPC workaround for OnAreaExit
 
-    // no players left in this area, schedule it for cleanup and serialize everything inside
+    // no players left in this area, serialize creatures within and schedule area for deletion
     if (NWNX_Area_GetNumberOfPlayersInArea(OBJECT_SELF) == 0) {
-        // TODO - LOOP TO SERIALIZE CREATURES HERE -> STORE INTO jaCreatures
+        json jaCreatures = JsonArray();
+        object oObject = GetFirstObjectInArea(OBJECT_SELF);
+        while (GetIsObjectValid(oObject)) {
+            if (GetObjectType(oObject) == OBJECT_TYPE_CREATURE) {
+                json joCreature = JsonObject();
+                json joPosition = JsonObject();
+
+                // save object as serialized string
+                joCreature = JsonObjectSet(joCreature, "serialization", JsonString(NWNX_Object_Serialize(oObject)));
+                // save position as json
+                vector vPosition = GetPosition(oObject);
+                joPosition = JsonObjectSet(joPosition, "x", JsonFloat(vPosition.x));
+                joPosition = JsonObjectSet(joPosition, "y", JsonFloat(vPosition.y));
+                joPosition = JsonObjectSet(joPosition, "z", JsonFloat(vPosition.z));
+                joCreature = JsonObjectSet(joCreature, "position", joPosition);
+                // save facing as json
+                joCreature = JsonObjectSet(joCreature, "facing", JsonFloat(GetFacing(oObject)));
+
+                // save creature's json object to the array of all-creatures
+                jaCreatures = JsonArrayInsert(jaCreatures, joCreature);
+                DestroyObject(oObject);
+            }
+            oObject = GetNextObjectInArea(OBJECT_SELF);
+        }
 
         sqlQuery = SqlPrepareQueryCampaign("conopp", "" +
             "REPLACE INTO _areacleanup " +
             "VALUES (@uuid, @creatures, strftime('%s','now')) "
         );
         SqlBindString(sqlQuery, "@uuid", GetObjectUUID(OBJECT_SELF));
-        SqlBindString(sqlQuery, "@creatures", /* TODO - JSON ARRAY OF ALL THE CREATURES IN THE AREA -> jaCreatures */);
+        SqlBindJson(sqlQuery, "@creatures", jaCreatures);
         SqlStep(sqlQuery);
-
-        // TODO - SERIALIZE CREATURES IN _areacleanup TABLE & DeleteObject THEM ALL
 
         DelayCommand(IntToFloat(CLEANUP_TIME), CleanupArea());
     }
@@ -46,7 +68,10 @@ void CleanupArea() {
         object oObject = GetFirstObjectInArea(oArea);
         while (GetIsObjectValid(oObject)) {
             if (GetObjectType(oObject) == OBJECT_TYPE_WAYPOINT) {
-                ReplaceObjectTexture(GetObjectByTag(GetTag(oObject)), "trans_blu");
+                // trans and waypoint have same tag; make sure we change the texture of the correct object
+                object oTrans = GetObjectByTag(GetTag(oObject));
+                if (oTrans == OBJECT_SELF) oTrans = GetObjectByTag(GetTag(oObject), 1);
+                ReplaceObjectTexture(oTrans, "trans_blu");
             }
             oObject = GetNextObjectInArea(oArea);
         }

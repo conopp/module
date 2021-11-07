@@ -5,6 +5,7 @@
 
 #include "nwnx_object"
 #include "nwnx_creature"
+#include "nwnx_player"
 
 
 // ************************
@@ -25,7 +26,7 @@ const int SPELL_BEASTHANDLING = 840; // spells.2da
 
 
 // Gives the creature a skin if they don't already have one
-void GiveCreatureSkin(object oCreature);
+object GiveCreatureSkin(object oCreature);
 
 // Sets a variable on a creature's skin item
 void SetSkinInt(object oCreature, string sVariable, int nValue);
@@ -131,41 +132,42 @@ void ApplyArmorClassLossFromGear(object oCreature, int nArmorClassType, int nInv
 // *************************
 
 
-void GiveCreatureSkin(object oCreature) {
-    // iit_cr_item_001 may be the skin item required for creatures, or all creatures may require x3_it_pchide; either way, x3_it_pchide is the only hide player characters are able to wear, the other type doesn't seem to spawn even when commanded to
+object GiveCreatureSkin(object oCreature) {
+    // iit_cr_item_001 isn't creatable; all creatures must use x3_it_pchide
     object oSkin = CreateItemOnObject("x3_it_pchide", oCreature);
     NWNX_Creature_RunEquip(oCreature, oSkin, INVENTORY_SLOT_CARMOUR);
     SetItemCursedFlag(oSkin, TRUE);
+    return oSkin;
 }
 
 void SetSkinInt(object oCreature, string sVariable, int nValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
-    DelayCommand(0.1, SetSkinInt(oCreature, sVariable, nValue));
+    if (!GetIsObjectValid(oSkin)) oSkin = GiveCreatureSkin(oCreature);
+    SetLocalInt(oSkin, sVariable, nValue);
 }
 
 void SetSkinFloat(object oCreature, string sVariable, float fValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
-    DelayCommand(0.1, SetLocalFloat(oSkin, sVariable, fValue));
+    if (!GetIsObjectValid(oSkin)) oSkin = GiveCreatureSkin(oCreature);
+    SetLocalFloat(oSkin, sVariable, fValue);
 }
 
 void SetSkinString(object oCreature, string sVariable, string sValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
-    DelayCommand(0.1, SetLocalString(oSkin, sVariable, sValue));
+    if (!GetIsObjectValid(oSkin)) oSkin = GiveCreatureSkin(oCreature);
+    SetLocalString(oSkin, sVariable, sValue);
 }
 
 void SetSkinLocation(object oCreature, string sVariable, location lValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
-    DelayCommand(0.1, SetLocalLocation(oSkin, sVariable, lValue));
+    if (!GetIsObjectValid(oSkin)) oSkin = GiveCreatureSkin(oCreature);
+    SetLocalLocation(oSkin, sVariable, lValue);
 }
 
 void SetSkinJson(object oCreature, string sVariable, json jValue) {
     object oSkin = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oCreature);
-    if (!GetIsObjectValid(oSkin)) GiveCreatureSkin(oCreature);
-    DelayCommand(0.1, SetLocalJson(oSkin, sVariable, jValue));
+    if (!GetIsObjectValid(oSkin)) oSkin = GiveCreatureSkin(oCreature);
+    SetLocalJson(oSkin, sVariable, jValue);
 }
 
 // *************************
@@ -323,6 +325,7 @@ int HasItemEquipped(object oItem, object oCreature=OBJECT_SELF) {
     else return -1;
 }
 
+// eventually add option to lock player in place (potentially by spawning an object inside them?)
 void FlatfootCreature(object oCreature, float fSeconds) {
     // if new flatfooted effect will expire before the existing one, don't add it at all; we only want 1 stack to ever exist at a time on the creature; "flatfooted_dex" is a more stable effect than "flatfooted_ac" which gets replaced more often (when boots are (un)equipped)
     if (fSeconds < IntToFloat(GetTaggedEffectDurationRemaining(oCreature, "flatfooted_dex")) || GetHasFeat(FEAT_IMMUNITY_FLATFOOT, oCreature)) return;
@@ -386,9 +389,3 @@ void ApplyArmorClassLossFromGear(object oCreature, int nArmorClassType, int nInv
         ipProp = GetNextItemProperty(oItem);
     }
 }
-
-// lock player into place by plopping them inside an object that exists at that same location
-// object oPlaceable = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_invisobj", GetLocation(oCreature), FALSE); // may need to use different (bigger?) object for locking to work
-// ApplyEffectToObject(DURATION_TYPE_PERMANENT, EffectVisualEffect(VFX_DUR_CUTSCENE_INVISIBILITY), oPlaceable);
-// NWNX_Object_SetPosition(oCreature, GetPositionFromLocation(GetLocation(oCreature)));
-// DelayCommand(fSeconds, DestroyObject(oPlaceable));

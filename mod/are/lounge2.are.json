@@ -100,7 +100,7 @@
   },
   "OnExit": {
     "type": "resref",
-    "value": ""
+    "value": "area_exit"
   },
   "OnHeartbeat": {
     "type": "resref",

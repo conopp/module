@@ -1,4 +1,5 @@
 #include "inc_general"
+#include "nwnx_player"
 
 void ExecuteSkillCheck(object oBeast)
 {
@@ -23,7 +24,13 @@ void ExecuteSkillCheck(object oBeast)
         SendMessageToPC(OBJECT_SELF, "You don't possess the feed item this beast requires.");
         return;
     }
-    DestroyObject(oFeed);
+
+    // account for item stacks
+    if (GetItemStackSize(oFeed) > 1) {
+        SetItemStackSize(oFeed, GetItemStackSize(oFeed) - 1);
+    } else {
+        DestroyObject(oFeed);
+    }
 
     // construct rolls & feedback
     int nSkillValue = GetSkillRank(SKILL_ANIMAL_EMPATHY);
@@ -42,6 +49,7 @@ void ExecuteSkillCheck(object oBeast)
 
         // others trying to handle an already-handled beast will have to beat the roll the current master originally made in order to become the new master
         SetSkinInt(oBeast, "bh_dc", nSkillValue + nRoll);
+        NWNX_Player_FloatingTextStringOnCreature(OBJECT_SELF, oBeast, IntToString(GetSkinInt(oBeast, "bh_dc")));
     }
 }
 

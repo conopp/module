@@ -15,6 +15,7 @@ void main()
     // animal empathy feedback -> overriden with custom string in s3_beasthandling
     NWNX_Feedback_SetFeedbackMessageHidden(NWNX_FEEDBACK_ASSOCIATE_DOMINATED, TRUE);
     NWNX_Feedback_SetFeedbackMessageHidden(NWNX_FEEDBACK_ASSOCIATE_DOMINATION_ENDED, TRUE);
+    NWNX_Feedback_SetFeedbackMessageHidden(NWNX_FEEDBACK_FLOATY_TEXT_STRING, TRUE);
     // "spell cast by" message with it's concentration check -> blocked because we use ActionCastSpell cheating and it announces as a "spell"
     NWNX_Feedback_SetCombatLogMessageHidden(NWNX_FEEDBACK_COMBATLOG_CAST_SPELL, TRUE);
 

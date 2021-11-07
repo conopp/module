@@ -9628,7 +9628,7 @@
         },
         "OnUsed": {
           "type": "resref",
-          "value": ""
+          "value": "it_changecolor"
         },
         "OnUserDefined": {
           "type": "resref",
@@ -9855,7 +9855,7 @@
         },
         "OnUsed": {
           "type": "resref",
-          "value": ""
+          "value": "trans_used"
         },
         "OnUserDefined": {
           "type": "resref",
@@ -9883,7 +9883,7 @@
         },
         "Tag": {
           "type": "cexostring",
-          "value": "trans22"
+          "value": "test_trans"
         },
         "TemplateResRef": {
           "type": "resref",
@@ -10082,7 +10082,7 @@
         },
         "OnUsed": {
           "type": "resref",
-          "value": ""
+          "value": "trans_used"
         },
         "OnUserDefined": {
           "type": "resref",
@@ -10110,7 +10110,7 @@
         },
         "Tag": {
           "type": "cexostring",
-          "value": "trans11"
+          "value": "trans_000"
         },
         "TemplateResRef": {
           "type": "resref",
@@ -10631,209 +10631,7 @@
   },
   "TriggerList": {
     "type": "list",
-    "value": [
-      {
-        "__struct_id": 1,
-        "AutoRemoveKey": {
-          "type": "byte",
-          "value": 0
-        },
-        "Cursor": {
-          "type": "byte",
-          "value": 1
-        },
-        "DisarmDC": {
-          "type": "byte",
-          "value": 0
-        },
-        "Faction": {
-          "type": "dword",
-          "value": 1
-        },
-        "Geometry": {
-          "type": "list",
-          "value": [
-            {
-              "__struct_id": 3,
-              "PointX": {
-                "type": "float",
-                "value": 0.0
-              },
-              "PointY": {
-                "type": "float",
-                "value": 0.0
-              },
-              "PointZ": {
-                "type": "float",
-                "value": 0.025
-              }
-            },
-            {
-              "__struct_id": 3,
-              "PointX": {
-                "type": "float",
-                "value": 0.0707
-              },
-              "PointY": {
-                "type": "float",
-                "value": -3.608
-              },
-              "PointZ": {
-                "type": "float",
-                "value": 0.025
-              }
-            },
-            {
-              "__struct_id": 3,
-              "PointX": {
-                "type": "float",
-                "value": 11.7791
-              },
-              "PointY": {
-                "type": "float",
-                "value": -3.6788
-              },
-              "PointZ": {
-                "type": "float",
-                "value": 0.025
-              }
-            },
-            {
-              "__struct_id": 3,
-              "PointX": {
-                "type": "float",
-                "value": 11.8498
-              },
-              "PointY": {
-                "type": "float",
-                "value": 0.1061
-              },
-              "PointZ": {
-                "type": "float",
-                "value": 0.025
-              }
-            }
-          ]
-        },
-        "HighlightHeight": {
-          "type": "float",
-          "value": 0.0
-        },
-        "KeyName": {
-          "type": "cexostring",
-          "value": ""
-        },
-        "LinkedTo": {
-          "type": "cexostring",
-          "value": "2"
-        },
-        "LinkedToFlags": {
-          "type": "byte",
-          "value": 2
-        },
-        "LoadScreenID": {
-          "type": "word",
-          "value": 0
-        },
-        "LocalizedName": {
-          "id": 14760,
-          "type": "cexolocstring",
-          "value": {}
-        },
-        "OnClick": {
-          "type": "resref",
-          "value": ""
-        },
-        "OnDisarm": {
-          "type": "resref",
-          "value": ""
-        },
-        "OnTrapTriggered": {
-          "type": "resref",
-          "value": ""
-        },
-        "PortraitId": {
-          "type": "word",
-          "value": 0
-        },
-        "ScriptHeartbeat": {
-          "type": "resref",
-          "value": ""
-        },
-        "ScriptOnEnter": {
-          "type": "resref",
-          "value": ""
-        },
-        "ScriptOnExit": {
-          "type": "resref",
-          "value": ""
-        },
-        "ScriptUserDefine": {
-          "type": "resref",
-          "value": ""
-        },
-        "Tag": {
-          "type": "cexostring",
-          "value": "AreaTransition"
-        },
-        "TemplateResRef": {
-          "type": "resref",
-          "value": "newtransition"
-        },
-        "TrapDetectable": {
-          "type": "byte",
-          "value": 1
-        },
-        "TrapDetectDC": {
-          "type": "byte",
-          "value": 0
-        },
-        "TrapDisarmable": {
-          "type": "byte",
-          "value": 1
-        },
-        "TrapFlag": {
-          "type": "byte",
-          "value": 0
-        },
-        "TrapOneShot": {
-          "type": "byte",
-          "value": 1
-        },
-        "TrapType": {
-          "type": "byte",
-          "value": 0
-        },
-        "Type": {
-          "type": "int",
-          "value": 1
-        },
-        "XOrientation": {
-          "type": "float",
-          "value": 0.0
-        },
-        "XPosition": {
-          "type": "float",
-          "value": 10.2145
-        },
-        "YOrientation": {
-          "type": "float",
-          "value": 0.0
-        },
-        "YPosition": {
-          "type": "float",
-          "value": 39.1256
-        },
-        "ZOrientation": {
-          "type": "float",
-          "value": 0.0
-        },
-        "ZPosition": {
-          "type": "float",
-          "value": 0.0
-        }
-      }
-    ]
+    "value": []
   },
   "WaypointList": {
     "type": "list",
@@ -10871,7 +10669,7 @@
         },
         "Tag": {
           "type": "cexostring",
-          "value": "1"
+          "value": "test_trans2"
         },
         "TemplateResRef": {
           "type": "resref",
@@ -10883,15 +10681,75 @@
         },
         "XPosition": {
           "type": "float",
-          "value": 16.1218
+          "value": 17.1688
         },
         "YOrientation": {
           "type": "float",
-          "value": 1.0
+          "value": -1.0
         },
         "YPosition": {
           "type": "float",
-          "value": 33.4869
+          "value": 4.3299
+        },
+        "ZPosition": {
+          "type": "float",
+          "value": -0.0
+        }
+      },
+      {
+        "__struct_id": 5,
+        "Appearance": {
+          "type": "byte",
+          "value": 1
+        },
+        "Description": {
+          "type": "cexolocstring",
+          "value": {}
+        },
+        "HasMapNote": {
+          "type": "byte",
+          "value": 0
+        },
+        "LinkedTo": {
+          "type": "cexostring",
+          "value": ""
+        },
+        "LocalizedName": {
+          "id": 14817,
+          "type": "cexolocstring",
+          "value": {}
+        },
+        "MapNote": {
+          "type": "cexolocstring",
+          "value": {}
+        },
+        "MapNoteEnabled": {
+          "type": "byte",
+          "value": 1
+        },
+        "Tag": {
+          "type": "cexostring",
+          "value": "trans_000"
+        },
+        "TemplateResRef": {
+          "type": "resref",
+          "value": "nw_waypoint001"
+        },
+        "XOrientation": {
+          "type": "float",
+          "value": 1.0
+        },
+        "XPosition": {
+          "type": "float",
+          "value": 36.1276
+        },
+        "YOrientation": {
+          "type": "float",
+          "value": 0.0
+        },
+        "YPosition": {
+          "type": "float",
+          "value": 11.8011
         },
         "ZPosition": {
           "type": "float",
