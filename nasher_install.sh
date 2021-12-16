@@ -8,7 +8,7 @@ cd ../../tools/nasher-0.15.2
 rm conopp.mod
 rm conopp.tlk
 
-cd ../../..
+cd ../..
 cp development/game-8193.31/user/modules/conopp.mod production/mod/conopp.mod
 rm production/dev/*
 cp -r development/game-8193.31/user/development/. production/dev/

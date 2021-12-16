@@ -11,14 +11,7 @@
         "__struct_id": 6,
         "Area_Name": {
           "type": "resref",
-          "value": "lounge"
-        }
-      },
-      {
-        "__struct_id": 6,
-        "Area_Name": {
-          "type": "resref",
-          "value": "lounge2"
+          "value": "lobby"
         }
       }
     ]
@@ -41,7 +34,9 @@
   },
   "Mod_Description": {
     "type": "cexolocstring",
-    "value": {}
+    "value": {
+      "0": ""
+    }
   },
   "Mod_DuskHour": {
     "type": "byte",
@@ -49,7 +44,7 @@
   },
   "Mod_Entry_Area": {
     "type": "resref",
-    "value": "lounge"
+    "value": "lobby"
   },
   "Mod_Entry_Dir_X": {
     "type": "float",
@@ -61,15 +56,15 @@
   },
   "Mod_Entry_X": {
     "type": "float",
-    "value": 11.2991
+    "value": 20.0
   },
   "Mod_Entry_Y": {
     "type": "float",
-    "value": 3.4207
+    "value": 7.0
   },
   "Mod_Entry_Z": {
     "type": "float",
-    "value": -0.0
+    "value": 0.0
   },
   "Mod_Expan_List": {
     "type": "list",
@@ -93,7 +88,7 @@
   },
   "Mod_MinPerHour": {
     "type": "byte",
-    "value": 2
+    "value": 10
   },
   "Mod_Name": {
     "type": "cexolocstring",
@@ -179,11 +174,11 @@
   },
   "Mod_StartHour": {
     "type": "byte",
-    "value": 13
+    "value": 8
   },
   "Mod_StartMonth": {
     "type": "byte",
-    "value": 6
+    "value": 1
   },
   "Mod_StartMovie": {
     "type": "resref",
@@ -191,7 +186,7 @@
   },
   "Mod_StartYear": {
     "type": "dword",
-    "value": 1372
+    "value": 1
   },
   "Mod_Tag": {
     "type": "cexostring",
@@ -203,6 +198,6 @@
   },
   "Mod_XPScale": {
     "type": "byte",
-    "value": 10
+    "value": 0
   }
 }
