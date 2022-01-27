@@ -1,11 +1,12 @@
+#include "inc_conopp"
+
 void main()
 {
-    // check if this is the player's first connect
-    // NWNX_Object_PeekUUID(object oObject);
+    // location is applied at an earlier event: NWNX_ON_ELC_VALIDATE_CHARACTER_BEFORE
 
-    // get player's hitpoints from .bic database
-    // SetCurrentHitPoints(object oObject, int nHitPoints);
+    json jnHitPoints = GetPlayerJson(OBJECT_SELF, PLAYER_HITPOINTS);
+    if (jnHitPoints != JsonNull())  SetCurrentHitPoints(OBJECT_SELF, JsonGetInt(jHitPoints));
 
-    // get player's effects from .bic database
-    // loop: ApplyEffectToObject(int nDurationType, effect eEffect, object oTarget, float fDuration=0.0f)
+    json jaEffects = GetPlayerJson(OBJECT_SELF, PLAYER_EFFECTS);
+    if (jaEffects != JsonNull()) ApplyStoredEffects(OBJECT_SELF, jaEffects);
 }

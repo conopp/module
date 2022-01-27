@@ -1,10 +1,13 @@
+#include "nwnx_object"
 #include "nwnx_player"
+#include "inc_conopp"
 
 void main()
 {
-    // check if this is the player's first connect
-    // NWNX_Object_PeekUUID(object oObject);
-    
-    // get player's location from .bic
-    // NWNX_Player_SetSpawnLocation(object oPlayer, location locSpawn);
+    json joLocation = GetPlayerJson(OBJECT_SELF, PLAYER_LOCATION);
+
+    // not a new player
+    if (joLocation != JsonNull()) {
+        NWNX_Player_SetSpawnLocation(OBJECT_SELF, JsonGetLocation(joLocation));
+    }
 }
