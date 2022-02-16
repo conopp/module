@@ -7,7 +7,7 @@ void main()
     if (OBJECT_SELF == OBJECT_INVALID) return;
 
     // save player's progress
-    SetPlayerJson(OBJECT_SELF, PLAYER_LOCATION, JsonLocation(GetLocation(oPC)));
-    SetPlayerJson(OBJECT_SELF, PLAYER_HITPOINTS, JsonInt(GetCurrentHitPoints(oPC)));
-    SetPlayerJson(OBJECT_SELF, PLAYER_EFFECTS, GetCurrentEffects(oPC));
+    SetPlayerJson(OBJECT_SELF, PLAYER_LOCATION, JsonLocation(GetLocation(OBJECT_SELF)));
+    SetPlayerJson(OBJECT_SELF, PLAYER_HITPOINTS, JsonInt(GetCurrentHitPoints(OBJECT_SELF)));
+    SetPlayerJson(OBJECT_SELF, PLAYER_EFFECTS, GetCurrentEffects(OBJECT_SELF));
 }

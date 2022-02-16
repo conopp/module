@@ -1,3 +1,13 @@
+// ====================
+// ====================
+
+// WARNING: THIS IS AN ALTERED nwnx_effect.nss FILE TO GET AROUND THE LIMITATION OF
+//     nwnsc NOT ACCEPTING VECTORS IN THE NWNX_EffectUnpacked STRUCT
+//     see: https://gist.github.com/Daztek/2b998b03ec289330b32ee17fd79fcd7d
+
+// ====================
+// ====================
+
 /// @addtogroup effect Effect
 /// @brief Utility functions to manipulate the builtin effect type.
 /// @{
@@ -51,8 +61,12 @@ struct NWNX_EffectUnpacked
     object oParam1; ///< @todo Describe
     object oParam2; ///< @todo Describe
     object oParam3; ///< @todo Describe
-    vector vParam0; ///< @todo Describe
-    vector vParam1; ///< @todo Describe
+    float fVector0_x; ///< @todo Describe
+    float fVector0_y; ///< @todo Describe
+    float fVector0_z; ///< @todo Describe
+    float fVector1_x; ///< @todo Describe
+    float fVector1_y; ///< @todo Describe
+    float fVector1_z; ///< @todo Describe
 
     string sTag; ///< @todo Describe
 
@@ -132,14 +146,12 @@ struct NWNX_EffectUnpacked __NWNX_Effect_ResolveUnpack(string sFunc, int bLink=T
 
     n.sTag = NWNX_GetReturnValueString();
 
-    float fZ = NWNX_GetReturnValueFloat();
-    float fY = NWNX_GetReturnValueFloat();
-    float fX = NWNX_GetReturnValueFloat();
-    n.vParam1 = Vector(fX, fY, fZ);
-    fZ = NWNX_GetReturnValueFloat();
-    fY = NWNX_GetReturnValueFloat();
-    fX = NWNX_GetReturnValueFloat();
-    n.vParam0 = Vector(fX, fY, fZ);
+    n.fVector1_z = NWNX_GetReturnValueFloat();
+    n.fVector1_y = NWNX_GetReturnValueFloat();
+    n.fVector1_x = NWNX_GetReturnValueFloat();
+    n.fVector0_z = NWNX_GetReturnValueFloat();
+    n.fVector0_y = NWNX_GetReturnValueFloat();
+    n.fVector0_x = NWNX_GetReturnValueFloat();
     n.oParam3 = NWNX_GetReturnValueObject();
     n.oParam2 = NWNX_GetReturnValueObject();
     n.oParam1 = NWNX_GetReturnValueObject();
@@ -243,13 +255,13 @@ void __NWNX_Effect_ResolvePack(string sFunc, struct NWNX_EffectUnpacked e, int b
     NWNX_PushArgumentObject(e.oParam2);
     NWNX_PushArgumentObject(e.oParam3);
 
-    NWNX_PushArgumentFloat(e.vParam0.x);
-    NWNX_PushArgumentFloat(e.vParam0.y);
-    NWNX_PushArgumentFloat(e.vParam0.z);
+    NWNX_PushArgumentFloat(e.fVector0_x);
+    NWNX_PushArgumentFloat(e.fVector0_y);
+    NWNX_PushArgumentFloat(e.fVector0_z);
 
-    NWNX_PushArgumentFloat(e.vParam1.x);
-    NWNX_PushArgumentFloat(e.vParam1.y);
-    NWNX_PushArgumentFloat(e.vParam1.z);
+    NWNX_PushArgumentFloat(e.fVector1_x);
+    NWNX_PushArgumentFloat(e.fVector1_y);
+    NWNX_PushArgumentFloat(e.fVector1_z);
 
     NWNX_PushArgumentString(e.sTag);
 
