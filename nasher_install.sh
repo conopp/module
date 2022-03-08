@@ -1,3 +1,6 @@
+# installing is a non-destructive process; we can make changes to nss or tlk
+#   folders and run the script again without worrying about anything being deleted
+
 # remove leftover compiled files; we don't want them lying around
 rm mod/nss/*.ncs
 

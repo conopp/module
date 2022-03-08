@@ -3,6 +3,7 @@
 // ************************
 
 #include "nwnx_effect"
+#include "nwnx_creature"
 
 // ************************
 // *      Variables       *
@@ -18,11 +19,12 @@ const string PLAYER_HITPOINTS = "hitpoints";
 const string PLAYER_EFFECTS   = "effects";
 const string PLAYER_CONNECTED = "connected";
 
-// consts for nwnx effect types
+// constants for nwnx effect types
 const int NWNX_EFFECT_TYPE_AISTATEINTERNAL = 23;
 const int NWNX_EFFECT_TYPE_VISION = 69;
 const int NWNX_EFFECT_TYPE_ARCANESPELLFAILURE = 25;
 const int NWNX_EFFECT_TYPE_SPELLFAILURE = 92;
+const int NWNX_EFFECT_TYPE_RUNSCRIPT = 96;
 
 // constants for EffectAIState() nAIState
 const int AISTATE_NO_LEGS = -3; // cannot move (can still be bumped around by friendlies)
@@ -37,6 +39,28 @@ const int VISION_TYPE_LOWLIGHTVISION = 1;
 const int VISION_TYPE_DARKVISION = 2;
 const int VISION_TYPE_ULTRAVISION = 3;
 const int VISION_TYPE_BLIND = 4;
+
+// constants for feats
+const int FEAT_SHIELD_PROFICIENCY_SMALL = 1220;
+const int FEAT_SHIELD_PROFICIENCY_LARGE = 1221;
+const int FEAT_SHIELD_PROFICIENCY_TOWER = 1222;
+const int FEAT_WEAPON_PROFICIENCY_UNARMED = 1123;
+const int FEAT_WEAPON_PROFICIENCY_CROSSBOW = 1124;
+const int FEAT_WEAPON_PROFICIENCY_DAGGER = 1125;
+const int FEAT_WEAPON_PROFICIENCY_HAMMER = 1126;
+const int FEAT_WEAPON_PROFICIENCY_HANDAXE = 1127;
+const int FEAT_WEAPON_PROFICIENCY_SPEAR = 1128;
+const int FEAT_WEAPON_PROFICIENCY_THROWING_AXE = 1129;
+const int FEAT_WEAPON_PROFICIENCY_SHORTBOW = 1130;
+const int FEAT_WEAPON_PROFICIENCY_RAPIER = 1131;
+const int FEAT_WEAPON_PROFICIENCY_FLAIL = 1132;
+const int FEAT_WEAPON_PROFICIENCY_LONGSWORD = 1133;
+const int FEAT_WEAPON_PROFICIENCY_GREATSWORD = 1134;
+const int FEAT_WEAPON_PROFICIENCY_LONGBOW = 1135;
+const int FEAT_WEAPON_PROFICIENCY_DIRE_MACE = 1136;
+const int FEAT_WEAPON_PROFICIENCY_TWO_SIDED_AXE = 1137;
+const int FEAT_WEAPON_PROFICIENCY_TWO_BLADED_SWORD = 1138;
+const int FEAT_WEAPON_PROFICIENCY_SCYTHE = 1139;
 
 // ************************
 // *      Prototypes      *
@@ -70,6 +94,9 @@ json GetCurrentEffects(object oObject);
 // applies all effects stored into a json array; works well when paired with GetCurrentEffects()
 void SetCurrentEffects(object oObject, json jaEffects);
 
+// sets the damage level on an object based on it's health value; returns percent of hp object has
+int SetHPOverrideLevel(object oObject);
+
 // returns an effect that allows changing AIStateInternal of the creature
 effect EffectAIState(int nAIState);
 
@@ -85,6 +112,14 @@ string SetPlayerJson(object oPC, string sCol, json jVal);
 
 // returns a player's location, hitpoints, or effects; see PLAYER_* constants
 json GetPlayerJson(object oPC, string sCol);
+
+// math functions for rounding floats
+int ToFloor(float fFloat);
+int ToCeiling(float fFloat);
+int ToRound(float fFloat);
+
+// returns the number of effects removed; uses nwnx effect ids and accepts tags
+int RemoveEffectsByType(object oObject, int nType, string sTag = "");
 
 // *************************
 // *       Functions       *
@@ -367,6 +402,23 @@ void SetCurrentEffects(object oObject, json jaEffects)
     PrintEffects(oObject);
 }
 
+int SetHPOverrideLevel(object oObject) {
+    int nHitPoints = GetCurrentHitPoints(oObject);
+    int nPercent = ToCeiling((IntToFloat(nHitPoints) / IntToFloat(GetMaxHitPoints(oObject))) * 100);
+
+    SendMessageToPC(GetFirstPC(), "HP: " + IntToString(nHitPoints) + " / " + IntToString(GetMaxHitPoints(oObject)) + " -> " + IntToString(nPercent) + "%");
+
+    if (nPercent <= 0) {
+        NWNX_Creature_OverrideDamageLevel(oObject, -1);
+    } else if (nPercent > 150) {
+        NWNX_Creature_OverrideDamageLevel(oObject, 155);
+    } else {
+        NWNX_Creature_OverrideDamageLevel(oObject, nPercent+5);
+    }
+
+    return nPercent;
+}
+
 effect EffectAIState(int nAIState) {
     struct NWNX_EffectUnpacked eEffect = BlankEffect();
         eEffect.nType = NWNX_EFFECT_TYPE_AISTATEINTERNAL;
@@ -417,4 +469,31 @@ json GetPlayerJson(object oPC, string sCol)
     SqlStep(sqlSelect);
 
     return SqlGetJson(sqlSelect, 1);
+}
+
+int ToFloor(float fFloat)
+{
+    return FloatToInt(fFloat);
+}
+
+int ToCeiling(float fFloat)
+{
+    return FloatToInt(fFloat + (IntToFloat(FloatToInt(fFloat)) < fFloat ? 1.0 : 0.0));
+}
+
+int ToRound(float fFloat)
+{
+    return FloatToInt(fFloat + 0.5f);
+}
+
+int RemoveEffectsByType(object oObject, int nType, string sTag) {
+    for (i = 0; i < NWNX_Effect_GetTrueEffectCount(oObject); i++) {
+        struct NWNX_EffectUnpacked eEffect = NWNX_Effect_GetTrueEffect(oObject, i);
+        if (eEffect.nType == nType) {
+            if (sTag != "" && eEffect.sTag != sTag) continue;
+            NWNX_Effect_RemoveEffectById(oObject, eEffect.sID);
+        }
+    }
+
+    return i;
 }

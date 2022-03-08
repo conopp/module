@@ -7,9 +7,9 @@ void main()
     switch (GetLastGuiEventType()) {
         case GUIEVENT_AREA_LOADSCREEN_FINISHED: {
             // differentiate between a client's first area-load after connecting, or successive joins for regular transitions
-            if (!GetLocalInt(oPC, "bJoiningServer")) {
+            if (!GetLocalInt(oPC, "bAlreadyConnected")) {
                 // area transition due to player connecting to game
-                SetLocalInt(oPC, "bJoiningServer", TRUE);
+                SetLocalInt(oPC, "bAlreadyConnected", TRUE);
                 ExecuteScript("player_ready", oPC);
             } else {
                 // ordinary area transition; save player's progress

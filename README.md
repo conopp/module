@@ -1,16 +1,11 @@
-- Left off: Making sure Sqlite queries work properly when getting & saving data into players .bic database (potential issues with null values etc, and we must be sure only 1 row ever exists)
+# Todo
+- Add the feats that are currently in conopp.2da to feat.2da, then create functional logic for them with nwnx
+- Optionally: separate nss scripts, tlk file, and mod file editing to separate 'save to json' & 'unsave from json' batch files
+- Setup hak directory compilation into the install/unpack scripts
+  - Install should compile the folder into a singular conopp.hak & conopp.erf and place them in the user/hak & user/erf directories, respectively
+  - Unpack should remove the .hak & .erf from their respective userdirectories and place the files (overriding) into the hak directory again
 
-# Checklist:
-## feature/persistence
-- [ ] Store player's properties to .bic in "player_logout", "player_ready" (in case a key was required to enter the area and server crashed), and OnUsed transition (in case player crashes when trying to enter new area) to restore during login
-  - [x] Player's position; normally saves (with everything else) on exit
-    - [x] Save position on exit
-  - [x] Player's health
-  - [ ] Player's effects (spells, vfx, etc)
-    - [ ] Clear caster ID when effects are casted unto player, so caster resting doesn't prematurely remove effects from player
-    - [x] Delete TURD after player leaves, so all logins are consistent and don't have to account for edge cases for both before/after server resets
-  - [x] Player's spells; persists automatically by enabling the "Restore Spell Uses On Login = 1" server option in nwnplayer.ini
-
-# Notes:
-- Players read health values from TURDs, and if one doesn't exist for the player, their health is displayed as full on the character's login sheet; only known fix is creating an NWNX extension to hook whatever function reads the TURD to populate with our own info
-- We can't serialize the player's TURD on logout and replace it on login, because while it'd be a very efficient solution, even if EatTURD was called after NWNX_ON_ELC_VALIDATE_CHARACTER_BEFORE, some negative effects don't persist to TURD anyway
+# Notes
+- To save changes to unpacked files, run the install script; to save changes to packed files, run the unpack script
+- You should only work on 1 thing at a time (script files, tlk file, or mod from within the toolset), then save the changes before working on something else, lest you override the script files or the tlk/mod files
+- The scripts and mod should first be unpacked to work on, then installed for testing; however, for tlk file edits, it should be installed, worked on, then unpacked to save the changes
