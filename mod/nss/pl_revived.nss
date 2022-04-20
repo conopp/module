@@ -1,4 +1,4 @@
-#include "inc_conopp"
+#include "inc_skin"
 
 void main() {
     object oPC = GetLastRespawnButtonPresser();
@@ -6,5 +6,5 @@ void main() {
     ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectResurrection(), oPC);
     ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
 
-    SetHPOverrideLevel(oPC);
+    SetSkinInt(oPC, PL_HITPOINTS, GetCurrentHitPoints(oPC));
 }

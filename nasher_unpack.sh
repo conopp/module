@@ -8,7 +8,7 @@ cd ../../tools/nasher-0.15.2
 ./nasher.exe unpack mod
 ./nasher.exe unpack tlk
 
-cd ../../development/game-8193.31/user
+cd ../../development/game/user
 rm -rf modules/conopp
 rm modules/conopp.mod
 rm tlk/conopp.tlk

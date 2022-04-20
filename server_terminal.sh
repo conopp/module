@@ -1,0 +1,1 @@
+docker attach production_nwserver_1

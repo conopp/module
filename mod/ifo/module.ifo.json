@@ -11,13 +11,6 @@
         "__struct_id": 6,
         "Area_Name": {
           "type": "resref",
-          "value": "area2"
-        }
-      },
-      {
-        "__struct_id": 6,
-        "Area_Name": {
-          "type": "resref",
           "value": "lobby"
         }
       }
@@ -37,7 +30,7 @@
   },
   "Mod_DawnHour": {
     "type": "byte",
-    "value": 6
+    "value": 7
   },
   "Mod_Description": {
     "type": "cexolocstring",
@@ -47,7 +40,7 @@
   },
   "Mod_DuskHour": {
     "type": "byte",
-    "value": 18
+    "value": 19
   },
   "Mod_Entry_Area": {
     "type": "resref",
@@ -63,11 +56,11 @@
   },
   "Mod_Entry_X": {
     "type": "float",
-    "value": 20.0
+    "value": 10.0
   },
   "Mod_Entry_Y": {
     "type": "float",
-    "value": 7.0
+    "value": 10.0
   },
   "Mod_Entry_Z": {
     "type": "float",
@@ -91,7 +84,7 @@
   },
   "Mod_MinGameVer": {
     "type": "cexostring",
-    "value": "1.85"
+    "value": "1.86"
   },
   "Mod_MinPerHour": {
     "type": "byte",
@@ -100,7 +93,7 @@
   "Mod_Name": {
     "type": "cexolocstring",
     "value": {
-      "0": "1.0.0.0"
+      "0": "conopp"
     }
   },
   "Mod_OnAcquirItem": {
@@ -181,7 +174,7 @@
   },
   "Mod_StartHour": {
     "type": "byte",
-    "value": 8
+    "value": 6
   },
   "Mod_StartMonth": {
     "type": "byte",
@@ -193,7 +186,7 @@
   },
   "Mod_StartYear": {
     "type": "dword",
-    "value": 1
+    "value": 1500
   },
   "Mod_Tag": {
     "type": "cexostring",
