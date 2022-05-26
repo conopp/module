@@ -2,18 +2,19 @@
 #include "inc_sqlite"
 #include "nwnx_events"
 
+void SetupDatabase();
 void SetModTimescale(int nMinsPerHour, int nDayBegin, int nDayEnd);
 
 void main()
 {
-    SqlSetupDatabase();
+    SetupDatabase();
 
     // settings
     SetModTimescale(10, 8, 20);
     SetModuleXPScale(0);
 
     // persistence
-    SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_HEARTBEAT, "mod_heartbeat");
+    NWNX_Events_SubscribeEvent("NWNX_ON_CALENDAR_HOUR", "mod_nexthour");
     NWNX_Events_SubscribeEvent("NWNX_ON_ELC_VALIDATE_CHARACTER_BEFORE", "pl_connect");
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_PLAYER_GUIEVENT, "pl_gui");
     NWNX_Events_SubscribeEvent("NWNX_ON_CLIENT_DISCONNECT_BEFORE", "pl_disconnect");
@@ -44,8 +45,41 @@ void main()
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_LOSE_ITEM, "");
 }
 
+void SetupDatabase() {
+    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_MOD + " (" +
+        COL_NAME      + " BLOB NOT NULL UNIQUE," +
+        COL_TIME      + " BLOB" +
+    ")");
+    SqlStep(sqlQuery);
+
+    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_STORAGE + " (" +
+        COL_UUID      + " BLOB NOT NULL UNIQUE," +
+        COL_NAME      + " BLOB NOT NULL," +
+        COL_ICON      + " BLOB NOT NULL," +
+        COL_BASEITEM  + " BLOB NOT NULL," +
+        COL_DATA      + " BLOB NOT NULL," +
+        COL_CDKEY     + " BLOB NOT NULL," +
+        COL_CREATION  + " BLOB NOT NULL" +
+    ")");
+    SqlStep(sqlQuery);
+
+    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_MARKET + " (" +
+        COL_UUID      + " BLOB NOT NULL UNIQUE," +
+        COL_NAME      + " BLOB NOT NULL," +
+        COL_ICON      + " BLOB NOT NULL," +
+        COL_BASEITEM  + " BLOB NOT NULL," +
+        COL_DATA      + " BLOB NOT NULL," +
+        COL_CDKEY     + " BLOB NOT NULL," +
+        COL_CREATION  + " BLOB NOT NULL" +
+    ")");
+    SqlStep(sqlQuery);
+}
+
 void SetModTimescale(int nMinsPerHour, int nDayBegin, int nDayEnd) {
-    json joTime = SqlGetModTime();
+    // get saved mod time from db
+    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "SELECT " + COL_NAME + "," + COL_TIME + " FROM " + TABLE_MOD);
+    SqlStep(sqlQuery);
+    json joTime = SqlGetJson(sqlQuery, 1);
 
     if (joTime == jNull) {
         // start mod at the beginning of the year if there's no persistently saved time yet

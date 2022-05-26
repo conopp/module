@@ -3,8 +3,6 @@
 
 void main()
 {
-    SqlSetModTime();
-
     object oPC = GetFirstPC();
     while (GetIsObjectValid(oPC)) {
         if (GetIsDead(oPC) || !GetIsLocationValid(GetLocation(oPC)))

@@ -34,11 +34,6 @@ const string TABLE_MARKET = "market";
 // *      Prototypes      *
 // ************************
 
-void SqlSetupDatabase();
-
-json SqlGetModTime();
-void SqlSetModTime();
-
 string SqlGetTimestamp();
 
 // json SqlListStorageItems(object oPC);
@@ -54,59 +49,6 @@ string SqlGetTimestamp();
 // *************************
 // *       Functions       *
 // *************************
-
-void SqlSetupDatabase() {
-    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_MOD + " (" +
-        COL_NAME      + " BLOB NOT NULL UNIQUE," +
-        COL_TIME      + " BLOB" +
-    ")");
-    SqlStep(sqlQuery);
-
-    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_STORAGE + " (" +
-        COL_UUID      + " BLOB NOT NULL UNIQUE," +
-        COL_NAME      + " BLOB NOT NULL," +
-        COL_ICON      + " BLOB NOT NULL," +
-        COL_BASEITEM  + " BLOB NOT NULL," +
-        COL_DATA      + " BLOB NOT NULL," +
-        COL_CDKEY     + " BLOB NOT NULL," +
-        COL_CREATION  + " BLOB NOT NULL" +
-    ")");
-    SqlStep(sqlQuery);
-
-    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "CREATE TABLE IF NOT EXISTS " + TABLE_MARKET + " (" +
-        COL_UUID      + " BLOB NOT NULL UNIQUE," +
-        COL_NAME      + " BLOB NOT NULL," +
-        COL_ICON      + " BLOB NOT NULL," +
-        COL_BASEITEM  + " BLOB NOT NULL," +
-        COL_DATA      + " BLOB NOT NULL," +
-        COL_CDKEY     + " BLOB NOT NULL," +
-        COL_CREATION  + " BLOB NOT NULL" +
-    ")");
-    SqlStep(sqlQuery);
-}
-
-json SqlGetModTime() {
-    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "SELECT " + COL_NAME + "," + COL_TIME + " FROM " + TABLE_MOD);
-    SqlStep(sqlQuery);
-
-    return SqlGetJson(sqlQuery, 1);
-}
-
-// persist mod time so server restarts continue from the same in-game minute on startup
-void SqlSetModTime() {
-    json joVal = JsonObject();
-    joVal = JsonObjectSet(joVal, "month", JsonInt(GetCalendarMonth()));
-    joVal = JsonObjectSet(joVal, "day", JsonInt(GetCalendarDay()));
-    joVal = JsonObjectSet(joVal, "hour", JsonInt(GetTimeHour()));
-    joVal = JsonObjectSet(joVal, "minute", JsonInt(GetTimeMinute()));
-
-    sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "INSERT INTO " + TABLE_MOD + " " +
-        "(" + COL_NAME + "," + COL_TIME + ") VALUES (@sModName,@joTime) " +
-        "ON CONFLICT DO UPDATE SET " + COL_TIME + "=@joTime");
-    SqlBindString(sqlQuery, "@sModName", MOD_NAME);
-    SqlBindJson(sqlQuery, "@joTime", joVal);
-    SqlStep(sqlQuery);
-}
 
 string SqlGetTimestamp() {
     sqlQuery = SqlPrepareQueryCampaign(MOD_NAME, "SELECT CURRENT_TIMESTAMP");

@@ -13,7 +13,7 @@ rm conopp.tlk
 
 cd ../..
 cp development/game/user/modules/conopp.mod production/mod/conopp.mod
-rm production/dev/*
+rm production/dev/* # don't wanna delete server dev folder because we need it for testing experimental .nss scripts quickly
 cp -r development/game/user/development/. production/dev/
 cp development/game/user/tlk/conopp.tlk production/tlk/conopp.tlk
 

@@ -2,6 +2,7 @@
 // *       Includes       *
 // ************************
 
+#include "inc_general"
 #include "nw_inc_nui"
 
 // ************************
@@ -25,6 +26,8 @@ json NuiRectCenter(object oPC, float fWidth, float fHeight);
 // *************************
 // *       Functions       *
 // *************************
+
+void RunTest(object oPC) {}
 
 void NuiHandleEvent(object oPC, int nToken, string sWindowID, string sEvent, string sElement, int nIndex, json jPayload) {
     if (sWindowID == "inventory") {

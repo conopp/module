@@ -1,6 +1,5 @@
 #include "inc_skin"
 #include "inc_effects"
-#include "nwnx_admin"
 
 void main()
 {
@@ -12,6 +11,7 @@ void main()
 
     SetSkinLocation(oPC, PL_LOCATION, GetLocation(oPC));
     SetSkinInt(oPC, PL_HITPOINTS, GetCurrentHitPoints(oPC));
-    // SetSkinJson(oPC, PL_EFFECTS, GetEffects(oPC));
+    SetSkinJson(oPC, PL_EFFECTS, GetEffects(oPC));
+
     ExportSingleCharacter(oPC);
 }

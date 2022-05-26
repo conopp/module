@@ -93,7 +93,7 @@
   "Mod_Name": {
     "type": "cexolocstring",
     "value": {
-      "0": "conopp"
+      "0": "1.0.0"
     }
   },
   "Mod_OnAcquirItem": {

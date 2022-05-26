@@ -23,12 +23,12 @@ void main()
     SetEventScript(oPC, EVENT_SCRIPT_CREATURE_ON_HEARTBEAT, "pl_heartbeat");
 
     // convert inventory to nui control
-    SetGuiPanelDisabled(oPC, GUI_PANEL_INVENTORY, TRUE);
+    // SetGuiPanelDisabled(oPC, GUI_PANEL_INVENTORY, TRUE);
 
     int nHP = GetSkinInt(oPC, PL_HITPOINTS);
 
     // don't try to get persistent hp & effects for newly created characters
-    // this value should only ever return 0 if it doesn't exist; even on death it's set to -1
+    // this value should only ever return 0 if it doesn't exist; as even on death it's set to -1
     if (!nHP) {
         // start new players out with a starter inventory bag
         SetSkinJson(oPC, PL_BAGS, StarterBag());
@@ -37,7 +37,7 @@ void main()
 
     // neither of these matter if the player will die, so can set them safely regardless
     SetCurrentHitPoints(oPC, nHP);
-    // SetEffects(oPC, GetSkinJson(oPC, PL_EFFECTS));
+    SetEffects(oPC, GetSkinJson(oPC, PL_EFFECTS));
 
     if (nHP < 0)
         ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), oPC);
