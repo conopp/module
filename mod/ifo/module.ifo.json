@@ -35,7 +35,7 @@
   "Mod_Description": {
     "type": "cexolocstring",
     "value": {
-      "0": ""
+      "0": "module properties description -> modify me in toolset!"
     }
   },
   "Mod_DuskHour": {

@@ -1,6 +1,7 @@
 #include "inc_general"
 #include "inc_sqlite"
 #include "nwnx_events"
+#include "nwnx_damage"
 
 void SetupDatabase();
 void SetModTimescale(int nMinsPerHour, int nDayBegin, int nDayEnd);
@@ -22,10 +23,14 @@ void main()
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_PLAYER_DEATH, "pl_death");
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_RESPAWN_BUTTON_PRESSED, "pl_revived");
 
-    SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "pl_nui");
-
     // commands
     SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_PLAYER_CHAT, "pl_chat");
+
+    // gui
+    SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_NUI_EVENT, "pl_nui");
+
+    // weapons, attacks, and resistances calculations
+    NWNX_Damage_SetAttackEventScript("mod_attack");
 
     // hp override
     // SetEventScript(GetModule(), EVENT_SCRIPT_MODULE_ON_PLAYER_REST, "pl_rest");

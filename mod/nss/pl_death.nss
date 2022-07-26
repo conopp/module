@@ -7,7 +7,7 @@ void main()
 
     SetSkinLocation(oPC, PL_LOCATION, GetLocation(oPC));
     SetSkinInt(oPC, PL_HITPOINTS, -1);
-    // SetSkinJson(oPC, PL_EFFECTS, GetEffects(oPC));
+    SetSkinJson(oPC, PL_EFFECTS, JsonArray());
 
     DelayCommand(3.0, PopUpGUIPanel(oPC, GUI_PANEL_PLAYER_DEATH));
 }

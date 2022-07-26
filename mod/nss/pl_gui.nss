@@ -6,6 +6,9 @@ void main()
 {
     object oPC = GetLastGuiEventPlayer();
 
+    // todo: see NWNX_ON_SERVER_SEND_AREA_AFTER to make this event easier (& PLAYER_NEW_TO_MODULE)
+    //       ie: move the GUIEVENT_AREA_LOADSCREEN_FINISHED code block to a new event/file instead of here
+
     switch (GetLastGuiEventType()) {
         case GUIEVENT_AREA_LOADSCREEN_FINISHED:
             // player connecting to server
@@ -16,7 +19,7 @@ void main()
             } else {
                 SetSkinLocation(oPC, PL_LOCATION, GetLocation(oPC));
                 SetSkinInt(oPC, PL_HITPOINTS, GetCurrentHitPoints(oPC));
-                // SetSkinJson(oPC, PL_EFFECTS, GetEffects(oPC));
+                SetSkinJson(oPC, PL_EFFECTS, GetEffects(oPC));
             }
             break;
         case GUIEVENT_DISABLED_PANEL_ATTEMPT_OPEN:

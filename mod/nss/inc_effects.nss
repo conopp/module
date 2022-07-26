@@ -57,13 +57,11 @@ void SetEffects(object oObj, json jaEffects) {
     for (i = 0; i < JsonGetLength(jaEffects); i++) {
         json jaEffectGroup = JsonArrayGet(jaEffects, i);
 
-        // todo: try cleaning this loop up... maybe a do-while?
-        // loop through each effect in the linked effect group
+        // duration gets set to 0 if we combine a valid effect with an invalid one, such as eGroup, so we need to get duration before linking the two effects
         effect eGroup;
         int nDuration;
         for (j = 0; j < JsonGetLength(jaEffectGroup); j++) {
             effect eEffect = JsonGetEffect(JsonArrayGet(jaEffectGroup, j));
-            // we have to get duration here, because it gets converted to 0 if we link the effect with a null eGroup
             nDuration = GetEffectDuration(eEffect);
 
             eGroup = EffectLinkEffects(eEffect, eGroup);
@@ -73,84 +71,32 @@ void SetEffects(object oObj, json jaEffects) {
     }
 }
 
+// only saves tagged effects; we should only be tagging effects that aren't hardcoded applied, then the non-tagged effects are auto-applied when we apply the base effect during SetEffects()
 json GetEffects(object oObj) {
-    // tags of effects that we should be saving
-    json jaTaggedEffects = JsonArray();
-    jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("strdebuff"));
-    jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("dexdebuff"));
-    jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("condebuff"));
-
-    // list of effect id's representing the group of effects we've already saved thus far
-    json jaSavedEffectGroups = JsonArray();
-
-    // list of all effect groups saved
-    json jaEffects = JsonArray();
-
-    for (i = 0; i < NWNX_Effect_GetTrueEffectCount(oObj); i++) {
-        struct NWNX_EffectUnpacked strEffect = NWNX_Effect_GetTrueEffect(oObj, i);
-
-        WriteTimestampedLogEntry("ITERATION: " + IntToString(i));
-
-        // check if effect has a tag we should be saving
-        int bHasImportantTag;
-        for (j = 0; j < JsonGetLength(jaTaggedEffects); j++) {
-            if (strEffect.sTag == JsonGetString(JsonArrayGet(jaTaggedEffects, j)))
-                bHasImportantTag = TRUE;
-        }
-
-        // check if effect already is saved into an effect group
-        int nEffectAlreadySavedInGroup;
-        for (j = 0; j < JsonGetLength(jaSavedEffectGroups); j++) {
-            if (strEffect.sID == JsonGetString(JsonArrayGet(jaSavedEffectGroups, j)))
-                nEffectAlreadySavedInGroup = TRUE;
-        }
-
-        if (!bHasImportantTag || nEffectAlreadySavedInGroup)
-            continue;
-
-        // effect is new; store all effects into a group
-        json jaEffectGroup = JsonArray();
-        for (j = 0; j < NWNX_Effect_GetTrueEffectCount(oObj); j++) {
-            struct NWNX_EffectUnpacked strEffect2 = NWNX_Effect_GetTrueEffect(oObj, j);
-            // only save tagged effects; we should only be tagging effects that aren't hardcoded applied, then the non-tagged effects are auto-applied when we apply the base effect during LoadEffects()
-            if (strEffect2.sID == strEffect.sID && strEffect2.sTag == strEffect.sTag)
-                jaEffectGroup = JsonArrayInsert(jaEffectGroup, JsonEffect(NWNX_Effect_PackEffect(strEffect2)));
-        }
-
-        // save the effect group into jaEffects
-        jaSavedEffectGroups = JsonArrayInsert(jaSavedEffectGroups, JsonInt(StringToInt(strEffect.sID)));
-        jaEffects = JsonArrayInsert(jaEffects, jaEffectGroup);
-    }
-
-    WriteTimestampedLogEntry("===== SAVED =====");
-    WriteTimestampedLogEntry(JsonDump(jaEffects, 4));
-
-    return jaEffects;
-
+    return JsonNull();
     // // tags of effects that we should be saving
     // json jaTaggedEffects = JsonArray();
+    // jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("barbarian_rage"));
     // jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("strdebuff"));
-    // jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("dexdebuff"));
-    // jaTaggedEffects = JsonArrayInsert(jaTaggedEffects, JsonString("condebuff"));
 
     // json jaSavedEffectGroups = JsonArray();
     // json jaEffects = JsonArray();
 
-    // for (i = 0; i < NWNX_Effect_GetTrueEffectCount(oObj); i++) {
+    // for (i = 0; i <= NWNX_Effect_GetTrueEffectCount(oObj); i++) {
     //     struct NWNX_EffectUnpacked strEffect = NWNX_Effect_GetTrueEffect(oObj, i);
 
     //     // check if effect has a tag we should be saving
     //     int bHasImportantTag;
     //     for (j = 0; j < JsonGetLength(jaTaggedEffects); j++) {
     //         if (strEffect.sTag == JsonGetString(JsonArrayGet(jaTaggedEffects, j)))
-    //             bHasImportantTag == TRUE;
+    //             bHasImportantTag = TRUE;
     //     }
 
     //     // check if effect already is saved into an effect group
     //     int nEffectAlreadySavedInGroup;
     //     for (j = 0; j < JsonGetLength(jaSavedEffectGroups); j++) {
     //         if (strEffect.sID == JsonGetString(JsonArrayGet(jaSavedEffectGroups, j)))
-    //             nEffectAlreadySavedInGroup == TRUE;
+    //             nEffectAlreadySavedInGroup = TRUE;
     //     }
 
     //     if (!bHasImportantTag || nEffectAlreadySavedInGroup)
@@ -161,11 +107,8 @@ json GetEffects(object oObj) {
     //     for (j = 0; j < NWNX_Effect_GetTrueEffectCount(oObj); j++) {
     //         struct NWNX_EffectUnpacked strEffect2 = NWNX_Effect_GetTrueEffect(oObj, j);
 
-    //         // only save tagged effects; we should only be tagging effects that aren't hardcoded applied, then the non-tagged effects are auto-applied when we apply the base effect during LoadEffects()
     //         if (strEffect2.sID == strEffect.sID && strEffect2.sTag == strEffect.sTag)
     //             jaEffectGroup = JsonArrayInsert(jaEffectGroup, JsonEffect(NWNX_Effect_PackEffect(strEffect2)));
-
-    //         SendMessageToPC(oObj, JsonDump(JsonEffect(NWNX_Effect_PackEffect(strEffect2)), 4));
     //     }
 
     //     // save the effect group into jaEffects
@@ -190,27 +133,11 @@ json JsonEffect(effect eEffect) {
     joEffect = JsonObjectSet(joEffect, "sTag", JsonString(strEffect.sTag));
 
     // fixes a bug where duration remaining returns 0 if effect isn't currently applied to an object; in these cases, total duration is same as remaining duration
-    int nDuration = GetEffectDuration(eEffect);
     int nDurationRemaining = GetEffectDurationRemaining(eEffect);
-
-    if (nDuration != 0 && nDurationRemaining == 0)
-        nDurationRemaining = nDuration;
+    if (!nDurationRemaining)
+        nDurationRemaining = GetEffectDuration(eEffect);
 
     joEffect = JsonObjectSet(joEffect, "fDuration", JsonFloat(IntToFloat(nDurationRemaining)));
-
-    // get time left remaining on effect if temporary
-    // edit: should be unnecessary to use this since we convert between NWNX_UnpackedEffect & effect types already, can just use the GetEffectDurationRemaining() above
-    // if (strEffect.fDuration > 0.0) {
-    //     // calculate fDuration by substracting current time from strEffect.nExpiryCalendarDay & strEffect.nExpiryTimeOfDay
-    //     int nCurrentCalendarDay = (GetCalendarYear() * 12 * 28) + ((GetCalendarMonth()-1) * 28) + (GetCalendarDay()-1);
-    //     int nCurrentTimeOfDay = (GetTimeHour() * FloatToInt(HoursToSeconds(1)) * 1000) + (GetTimeMinute() * 60 * 1000) + (GetTimeSecond() * 1000) + GetTimeMillisecond();
-    //     int nCalendarDayRemaining = strEffect.nExpiryCalendarDay - nCurrentCalendarDay;
-    //     int nTimeOfDayRemaining = strEffect.nExpiryTimeOfDay - nCurrentTimeOfDay;
-
-    //     // convert calendar & time remaining variables time into seconds
-    //     float fDuration = (IntToFloat(nCalendarDayRemaining) * HoursToSeconds(1)) + (IntToFloat(nTimeOfDayRemaining) / 1000.0) + 1.0;
-    //     joEffect = JsonObjectSet(joEffect, "fDuration", JsonFloat(fDuration));
-    // }
 
     return joEffect;
 }

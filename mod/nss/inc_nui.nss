@@ -17,9 +17,10 @@ const int DEBUG_NUI = TRUE;
 
 void NuiHandleEvent(object oPC, int nToken, string sWindowID, string sEvent, string sElement, int nIndex, json jPayload);
 
+void NuiOpenChargen(object oPC);
 void NuiOpenInventory(object oPC);
-void NuiOpenEventStorage(object oPC);
-void NuiOpenEventMarket(object oPC);
+void NuiOpenStorage(object oPC);
+void NuiOpenMarket(object oPC);
 
 json NuiRectCenter(object oPC, float fWidth, float fHeight);
 
@@ -27,7 +28,20 @@ json NuiRectCenter(object oPC, float fWidth, float fHeight);
 // *       Functions       *
 // *************************
 
-void RunTest(object oPC) {}
+// placeholder for NuiOpenChargen
+void RunTest(object oPC) {
+    json jaRow1 = JsonArray();
+    json jaRow2 = JsonArray();
+    json jaRow3 = JsonArray();
+    json jaRow4 = JsonArray();
+
+    json jaCol1 = JsonArray();
+    json jaCol2 = JsonArray();
+    json jaCol3 = JsonArray();
+    json jaCol4 = JsonArray();
+
+    
+}
 
 void NuiHandleEvent(object oPC, int nToken, string sWindowID, string sEvent, string sElement, int nIndex, json jPayload) {
     if (sWindowID == "inventory") {
