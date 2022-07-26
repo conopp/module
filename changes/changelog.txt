@@ -1,0 +1,146 @@
+June 27, 2022
+  • Hakpak: Equipment
+    • Gear
+      • Armor descriptions and base stats have been modified to be more compact and quicker to read
+      • Amulets, rings, belts, cloaks, and helmets can now have damage itemproperties
+      • Throwing weapons can now have damage immunity & resistance itemproperties
+      • Several changes have been made to equalize armor and are categorized below
+        • Cloth
+          • Allowed dex bonus: uncapped -> 12
+          • Weight: 1 lb -> 3 lbs
+        • Light
+          • Base armor class: 1-3 -> 2
+          • Allowed dex bonus: 4-8 -> 8
+          • Armor check penalty: 0-1 -> 2
+          • Base arcane spell failure: 5%-20% -> 5%
+          • Weight: 5-15 lbs -> 7.5 lbs
+        • Medium
+          • Base armor class: 4-5 -> 4
+          • Allowed dex bonus: 2-4 -> 4
+          • Armor check penalty: 2-5 -> 4
+          • Base arcane spell failure: 20%-30% -> 15%
+          • Weight: 30-40 lbs -> 15 lbs
+        • Heavy
+          • Base armor class: 6-8 -> 6
+          • Allowed dex bonus: 1 -> 0
+          • Armor check penalty: 7-8 -> 6
+          • Base arcane spell failure: 40%-45% -> 25%
+          • Weight: 50 lbs -> 25 lbs
+      • Shields have had some changes too, as listed below
+        • Small
+          • Base armor class: 1 -> 2
+          • Armor check penalty: -1 -> -2
+          • Base arcane spell failure: 15% -> 0%
+        • Large
+          • Base armor class: 2 -> 4
+          • Armor check penalty: -2 -> -4
+          • Base arcane spell failure: 15% -> 0%
+        • Tower
+          • Base armor class: 3 -> 6
+          • Armor check penalty: -10 -> -6
+          • Base arcane spell failure: 50% -> 0%
+          • Weight: 45 lbs -> 25 lbs
+    • Weapons
+      • Weapon VFX is no longer automatically given to weapons with the proper damage bonus types
+      • Base weapon damage is now based on size, with the exception of scythes
+        • Small -> 1d2
+        • Medium -> 1d4
+        • Large -> 1d6
+        • Scythe -> 1d8
+      • Removed several undesirable weapons; the weapons that remain are listed below with changes
+        • Arrows & Bolts
+          • Weight: 0 lbs -> 0.1 lbs
+          • Stack size: 99 -> 999
+        • Light Crossbow
+          • Criticals: 19-20 x2 -> 6% x1.5
+          • Renamed to "Crossbow"
+          • AC bonus type changed to dodge
+          • Weight: 6 lbs -> 6.5 lbs
+          • Max range: 40 -> 30
+          • Autotarget range: 20 -> 30
+          • Size: Small -> Medium
+          • Can now have damage itemproperties
+        • Dagger
+          • Criticals: 19-20 x2 -> 8% x1.25
+          • Weapon size: Tiny -> Small
+        • Light Hammer
+          • Criticals: 20-20 x2 -> 4% 1.5
+          • Renamed to "Hammer"
+          • Weapon proficiency: martial -> simple
+          • Weight: 2 lbs -> 5 lbs
+        • Handaxe
+          • Criticals: 20-20 x3 -> 6% x1.25
+          • Weapon proficiency: martial -> simple
+          • Weight: 5 lbs -> 3 lbs
+        • Spear
+          • Criticals: 20-20 x3 -> 6% x1.75
+          • Weight: 3 lbs -> 4 lbs
+        • Throwing axe
+          • Criticals: 20-20 x3 -> 8% x1.5
+          • Renamed to "Throwing Axe"
+          • AC bonus type changed to dodge
+          • Weight: 1 lbs -> 0.2 lbs
+          • Stack size: 50 -> 999
+          • Max range: 40 -> 20
+          • Autotarget range: 20 -> 20
+          • Weight: 1 lbs -> 0.1 lbs
+        • Shortbow
+          • Criticals: 20-20 x3 -> 6% x1.75
+          • AC bonus type changed to dodge
+          • Weight: 2 lbs -> 3 lbs
+          • Max range: 40 -> 25
+          • Autotarget range: 20 -> 25
+          • Can now have damage itemproperties
+        • Rapier
+          • Criticals: 18-20 x2 -> 6% x1.75
+        • Light Flail
+          • Criticals: 18-20 x2 -> 2% x2.25
+          • Is now a monk weapon
+          • Renamed to "Flail"
+          • Weight: 5 lbs -> 9 lbs
+          • Is now finnessable -> medium size or higher
+        • Longsword
+          • Criticals: 19-20 x2 -> 4% x1.75
+          • Is now finnessable -> medium size or higher
+        • Greatsword
+          • Criticals: 19-20 x2 -> 6% x1.75
+          • Weight: 15 lbs -> 8.5 lbs
+        • Longbow
+          • Criticals: 20-20 x3 -> 8% x2
+          • Weapon proficiency: martial -> exotic
+          • AC bonus type changed to dodge
+          • Weight: 3 lbs -> 6 lbs
+          • Max range: 40 -> 25
+          • Autotarget range: 20 -> 25
+          • Can now have damage itemproperties
+        • Dire mace
+          • Criticals: 20-20 x2 -> 6% x2
+          • Renamed to "Dire Mace"
+          • Weight: 20 lbs -> 16 lbs
+        • Double axe
+          • Criticals: 20-20 x3 -> 6% x2
+          • Renamed to "Two-sided Axe"
+          • Weight: 25 lbs -> 17 lbs
+        • Two-bladed Sword
+          • Criticals: 19-20 x2 -> 10% x1.75
+          • Weight: 15 lbs -> 9.5 lbs
+        • Scythe
+          • Damage type: S/P -> S
+          • Criticals: 20-20 x4 -> 12% x2
+          • Weight: 12 lbs -> 7 lbs
+June 13, 2022
+  • Hakpak: Lighting
+    • Item Properties
+      • Colors have been tweaked to make discernment between them easier
+      • Ranges have been dramatically reduced to promote a hardcore style
+        • Lights' item property names have been adjusted to better reflect the new ranges
+      • Light radius priority has been improved; weaker lights won't override stronger ones
+        • This applies to racial vision; note other players see the light instead since they can't
+          see your racial vision
+      • Unequipping light now fades 3x faster to match the speed of growth when equipping
+      • Dim lights now cast shadows
+      • Lights now get file consistency checks by server in an effort to reduce cheating
+    • Racial Vision
+      • Brightness and ranges have been tweaked to promote a hardcore style; race matters
+      • Nearby external lighting no longer removes racial vision; they can exist concurrently
+      • Racial vision now applies ambient occlusion to the environment to make loot easier to see

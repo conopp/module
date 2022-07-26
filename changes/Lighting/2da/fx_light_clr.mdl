@@ -1,0 +1,597 @@
+newmodel fx_light_clr
+  # header
+  classification EFFECT
+
+  # geometry
+  beginmodelgeom fx_light_clr
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light vision
+      parent fx_light_clr
+      position 0 -0.640 0.025
+      shadow 0
+    endnode
+    node light general
+      parent fx_light_clr
+      position 0 -0.640 0.025
+    endnode
+  endmodelgeom fx_light_clr
+
+  # animation
+  newanim vision_blind fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light vision
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim vision_blind fx_light_clr
+
+  # animation
+  newanim vision_lowlight fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light vision
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim vision_lowlight fx_light_clr
+
+  # animation
+  newanim vision_dark fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light vision
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim vision_dark fx_light_clr
+
+  # animation
+  newanim vision_ultra fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light vision
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.850 0.650 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim vision_ultra fx_light_clr
+
+  # animation
+  newanim blue_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.700
+      colorkey 1
+        0.000 0.500 0.750 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim blue_dim fx_light_clr
+
+  # animation
+  newanim blue_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.700
+      colorkey 1
+        0.000 0.500 0.750 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim blue_low fx_light_clr
+
+  # animation
+  newanim blue_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.500 0.750 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim blue_normal fx_light_clr
+
+  # animation
+  newanim blue_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.700
+      colorkey 1
+        0.000 0.500 0.750 1.000
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim blue_bright fx_light_clr
+
+  # animation
+  newanim yellow_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.550
+      colorkey 1
+        0.000 1.000 1.000 0.250
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim yellow_dim fx_light_clr
+
+  # animation
+  newanim yellow_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.550
+      colorkey 1
+        0.000 1.000 1.000 0.250
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim yellow_low fx_light_clr
+
+  # animation
+  newanim yellow_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 0.250
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim yellow_normal fx_light_clr
+
+  # animation
+  newanim yellow_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.550
+      colorkey 1
+        0.000 1.000 1.000 0.250
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim yellow_bright fx_light_clr
+
+  # animation
+  newanim red_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 1.000 0.500 0.500
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim red_dim fx_light_clr
+
+  # animation
+  newanim red_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 1.000 0.500 0.500
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim red_low fx_light_clr
+
+  # animation
+  newanim red_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.700
+      colorkey 1
+        0.000 1.000 0.500 0.500
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim red_normal fx_light_clr
+
+  # animation
+  newanim red_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.700
+      colorkey 1
+        0.000 1.000 0.500 0.500
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim red_bright fx_light_clr
+
+  # animation
+  newanim orange_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 1.000 0.650 0.000
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim orange_dim fx_light_clr
+
+  # animation
+  newanim orange_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 1.000 0.650 0.000
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim orange_low fx_light_clr
+
+  # animation
+  newanim orange_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.600
+      colorkey 1
+        0.000 1.000 0.650 0.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim orange_normal fx_light_clr
+
+  # animation
+  newanim orange_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 1.000 0.650 0.000
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim orange_bright fx_light_clr
+
+  # animation
+  newanim purple_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.850 0.650 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim purple_dim fx_light_clr
+
+  # animation
+  newanim purple_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.850 0.650 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim purple_low fx_light_clr
+
+  # animation
+  newanim purple_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.850 0.650 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim purple_normal fx_light_clr
+
+  # animation
+  newanim purple_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.650
+      colorkey 1
+        0.000 0.850 0.650 1.000
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim purple_bright fx_light_clr
+
+  # animation
+  newanim green_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.600
+      colorkey 1
+        0.000 0.650 1.000 0.850
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim green_dim fx_light_clr
+
+  # animation
+  newanim green_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.600
+      colorkey 1
+        0.000 0.650 1.000 0.850
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim green_low fx_light_clr
+
+  # animation
+  newanim green_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 0.650 1.000 0.850
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim green_normal fx_light_clr
+
+  # animation
+  newanim green_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.550
+      colorkey 1
+        0.000 0.650 1.000 0.850
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim green_bright fx_light_clr
+
+  # animation
+  newanim white_dim fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 2.500
+    endnode
+  doneanim white_dim fx_light_clr
+
+  # animation
+  newanim white_low fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 5.000
+    endnode
+  doneanim white_low fx_light_clr
+
+  # animation
+  newanim white_normal fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000 0.000
+        0.250 7.500
+    endnode
+  doneanim white_normal fx_light_clr
+
+  # animation
+  newanim white_bright fx_light_clr
+    animroot fx_light_clr
+    length 0.250
+    node dummy fx_light_clr
+      parent NULL
+    endnode
+    node light general
+      parent fx_light_clr
+      multiplier 0.500
+      colorkey 1
+        0.000 1.000 1.000 1.000
+      radiuskey 2
+        0.000  0.000
+        0.250 10.000
+    endnode
+  doneanim white_bright fx_light_clr
+
+donemodel fx_light_clr
