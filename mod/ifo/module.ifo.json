@@ -11,6 +11,13 @@
         "__struct_id": 6,
         "Area_Name": {
           "type": "resref",
+          "value": "area001"
+        }
+      },
+      {
+        "__struct_id": 6,
+        "Area_Name": {
+          "type": "resref",
           "value": "lobby"
         }
       }
@@ -44,7 +51,7 @@
   },
   "Mod_Entry_Area": {
     "type": "resref",
-    "value": "lobby"
+    "value": "area001"
   },
   "Mod_Entry_Dir_X": {
     "type": "float",
@@ -56,15 +63,15 @@
   },
   "Mod_Entry_X": {
     "type": "float",
-    "value": 10.0
+    "value": 9.712899999999999
   },
   "Mod_Entry_Y": {
     "type": "float",
-    "value": 10.0
+    "value": 9.667400000000001
   },
   "Mod_Entry_Z": {
     "type": "float",
-    "value": 0.0
+    "value": 5.0
   },
   "Mod_Expan_List": {
     "type": "list",
